@@ -23,12 +23,14 @@ def runlength(d):
 class TestSplit(object):
     FILES = ['file1.txt', 'file2.txt', 'simulation.input']
 
-    def test_split_dirs(self, rm_dirs):
-        prsp.split('mysim', ntasks=2)
+    @pytest.mark.parametrize('ntasks', [1, 2, 3, 4, 5])
+    def test_split_dirs(self, ntasks, rm_dirs):
+        prsp.split('mysim', ntasks=ntasks)
 
         # check that required directories were made
-        for i in ['1', '2']:
-            assert os.path.exists('mysim_part_{}'.format(i))
+        for i in range(ntasks):
+            assert os.path.exists('mysim_part_{}'.format(i + 1))
+        assert not os.path.exists('mysim_part_{}'.format(i + 2))
 
     def test_split_files(self, rm_dirs):
         prsp.split('mysim', ntasks=2)
@@ -39,8 +41,13 @@ class TestSplit(object):
             for fn in self.FILES:
                 assert os.path.exists(os.path.join(d, fn))
 
-    def test_check_runlength(self, rm_dirs):
-        prsp.split('mysim', ntasks=2)
+    @pytest.mark.parametrize('ntasks,expected', [
+        (2, 500001),
+        (3, 333334),
+        (4, 250001),
+    ])
+    def test_check_runlength(self, ntasks, expected, rm_dirs):
+        prsp.split('mysim', ntasks=ntasks)
 
         for d in ('mysim_part_1', 'mysim_part_2'):
-            assert runlength(d) == 500001
+            assert runlength(d) == expected

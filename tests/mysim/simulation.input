@@ -1,0 +1,37 @@
+SimulationType                MonteCarlo
+NumberOfCycles                1000000
+NumberOfInitializationCycles  0
+PrintEvery                    10000
+PrintPropertiesEvery          100000
+RestartFile                   no
+
+# Restart and crash-recovery
+ContinueAfterCrash              no
+WriteBinaryRestartFileEvery     100000
+
+Forcefield                    IRMOF-1_K.Walton_truncated
+CutOffVDW                     25.0
+ChargeMethod                  None  #CoulombShifted or Ewald
+CutOffChargeCharge            25.8
+EwaldPrecision                1e-6
+
+UseChargesFromCIFFile         yes
+
+Framework 0
+FrameworkName IRMOF-1
+UnitCells 2 2 2
+HeliumVoidFraction 0.78
+ExternalTemperature 208.0
+ExternalPressure  {pressure}
+Movies no
+WriteMoviesEvery    {coords_freq}
+
+# Grids
+NumberOfGrids 0
+
+Component 0 MoleculeName             CO2
+            TranslationProbability   0.25
+            RotationProbability      0.25
+            SwapProbability          0.50
+            CreateNumberOfMolecules  0
+

@@ -14,8 +14,14 @@ def rm_dirs():
         except OSError:
             pass
 
+def runlength(d):
+    with open(os.path.join(d, 'simulation.input'), 'r') as f:
+        for line in f:
+            if 'NumberOfCycles' in line:
+                return int(line.split()[1])
+
 class TestSplit(object):
-    FILES = ['file1.txt', 'file2.txt']
+    FILES = ['file1.txt', 'file2.txt', 'simulation.input']
 
     def test_split_dirs(self, rm_dirs):
         prsp.split('mysim', ntasks=2)
@@ -32,3 +38,9 @@ class TestSplit(object):
         for d in ('mysim_part_1', 'mysim_part_2'):
             for fn in self.FILES:
                 assert os.path.exists(os.path.join(d, fn))
+
+    def test_check_runlength(self, rm_dirs):
+        prsp.split('mysim', ntasks=2)
+
+        for d in ('mysim_part_1', 'mysim_part_2'):
+            assert runlength(d) == 500001

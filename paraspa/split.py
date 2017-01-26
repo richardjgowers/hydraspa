@@ -28,6 +28,8 @@ def split(src, ntasks):
         # Find and modify the simulation.input file
         divide_runtime_by(newname, ntasks)
 
+    make_qsubber_script(src, newdirs)
+
 
 def divide_runtime_by(src, factor):
     """Look in *src* and divide the number of Cycles by *factor*"""
@@ -47,3 +49,12 @@ def divide_runtime_by(src, factor):
                 line = line.replace(ncycles, str(newcycles))
 
             newfile.write(line)
+
+def make_qsubber_script(base, copies):
+    with open('qsub_{}.sh'.format(base), 'w') as out:
+        out.write("#!/bin/bash\n")
+        for d in copies:
+            out.write("\n")
+            out.write("cd {}\n".format(d))
+            out.write("qsub qsub.sh\n")
+            out.write("cd ../\n")

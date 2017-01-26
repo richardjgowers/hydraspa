@@ -7,7 +7,7 @@ import shutil
 @pytest.fixture(scope='function')
 def rm_dirs():
     yield
-    for d in glob.glob('*part_*'):
+    for d in glob.glob('mysim_part_*'):
         try:
             shutil.rmtree(d)
         except OSError:

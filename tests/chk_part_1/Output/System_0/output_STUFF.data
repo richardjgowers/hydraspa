@@ -1,0 +1,124 @@
+Angle-constraints energy:
+=======================
+	Block[ 0]            0.00000 [K]
+	Block[ 1]            0.00000 [K]
+	Block[ 2]            0.00000 [K]
+	Block[ 3]            0.00000 [K]
+	Block[ 4]            0.00000 [K]
+	------------------------------------------------------------------------------
+	Average              0.00000 [K] +/-            0.00000 [K]
+
+Dihedral-constraints energy:
+=======================
+	Block[ 0]            0.00000 [K]
+	Block[ 1]            0.00000 [K]
+	Block[ 2]            0.00000 [K]
+	Block[ 3]            0.00000 [K]
+	Block[ 4]            0.00000 [K]
+	------------------------------------------------------------------------------
+	Average              0.00000 [K] +/-            0.00000 [K]
+
+Inversion-bend constraints energy:
+=======================
+	Block[ 0]            0.00000 [K]
+	Block[ 1]            0.00000 [K]
+	Block[ 2]            0.00000 [K]
+	Block[ 3]            0.00000 [K]
+	Block[ 4]            0.00000 [K]
+	------------------------------------------------------------------------------
+	Average              0.00000 [K] +/-            0.00000 [K]
+
+Out-of-plane-distance constraints energy:
+=======================
+	Block[ 0]            0.00000 [K]
+	Block[ 1]            0.00000 [K]
+	Block[ 2]            0.00000 [K]
+	Block[ 3]            0.00000 [K]
+	Block[ 4]            0.00000 [K]
+	------------------------------------------------------------------------------
+	Average              0.00000 [K] +/-            0.00000 [K]
+
+Exclusion-constraints energy:
+=======================
+	Block[ 0]            0.00000 [K]
+	Block[ 1]            0.00000 [K]
+	Block[ 2]            0.00000 [K]
+	Block[ 3]            0.00000 [K]
+	Block[ 4]            0.00000 [K]
+	------------------------------------------------------------------------------
+	Average              0.00000 [K] +/-            0.00000 [K]
+
+Total energy:
+=============
+	Block[ 0]     -1105944.04185 [K]
+	Block[ 1]     -1131000.24470 [K]
+	Block[ 2]     -1112301.29122 [K]
+	Block[ 3]     -1113194.67628 [K]
+	Block[ 4]     -1123832.24477 [K]
+	------------------------------------------------------------------------------
+	Average       -1117254.49976 [K] +/-        17914.35476 [K]
+
+Number of molecules:
+====================
+
+Component 0 [CO2]
+-------------------------------------------------------------
+	Block[ 0] 635.97693          [-]
+	Block[ 1] 648.63432          [-]
+	Block[ 2] 638.99968          [-]
+	Block[ 3] 639.89191          [-]
+	Block[ 4] 645.09387          [-]
+	------------------------------------------------------------------------------
+	Average                                    641.7193426043 +/-       9.0737322410 [-]
+	Average loading absolute [molecules/unit cell]       80.2149178255 +/-       1.1342165301 [-]
+	Average loading absolute [mol/kg framework]         13.0222383370 +/-       0.1841308123 [-]
+	Average loading absolute [milligram/gram framework]        573.1061047629 +/-       8.1035602249 [-]
+	Average loading absolute [cm^3 (STP)/gr framework]        291.8801342645 +/-       4.1271035622 [-]
+	Average loading absolute [cm^3 (STP)/cm^3 framework]        173.2004249218 +/-       2.4490056251 [-]
+
+	Block[ 0] 635.97693          [-]
+	Block[ 1] 648.63432          [-]
+	Block[ 2] 638.99968          [-]
+	Block[ 3] 639.89191          [-]
+	Block[ 4] 645.09387          [-]
+	------------------------------------------------------------------------------
+	Average                                    639.8322081555 +/-       9.0737322410 [-]
+	Average loading excess [molecules/unit cell]       79.9790260194 +/-       1.1342165301 [-]
+	Average loading excess [mol/kg framework]         12.9839432243 +/-       0.1841308123 [-]
+	Average loading excess [milligram/gram framework]        571.4207445107 +/-       8.1035602249 [-]
+	Average loading excess [cm^3 (STP)/gr framework]        291.0217885365 +/-       4.1271035622 [-]
+	Average loading excess [cm^3 (STP)/cm^3 framework]        172.6910862332 +/-       2.4490056251 [-]
+
+
+Average Widom Rosenbluth factor:
+================================
+	Block[ 0] 0 [-]
+	Block[ 1] 0 [-]
+	Block[ 2] 0 [-]
+	Block[ 3] 0 [-]
+	Block[ 4] 0 [-]
+	------------------------------------------------------------------------------
+	[CO2] Average Widom:   0 +/- 0.000000 [-]
+
+Average Henry coefficient:
+==========================
+	Block[ 0] 0 [mol/kg/Pa]
+	Block[ 1] 0 [mol/kg/Pa]
+	Block[ 2] 0 [mol/kg/Pa]
+	Block[ 3] 0 [mol/kg/Pa]
+	Block[ 4] 0 [mol/kg/Pa]
+	------------------------------------------------------------------------------
+	[CO2] Average Henry coefficient:  0 +/- 0 [mol/kg/Pa]
+
+Average adsorption energy <U_gh>_1-<U_h>_0 obtained from Widom-insertion:
+(Note: the total heat of adsorption is dH=<U_gh>_1-<U_h>_0 - <U_g> - RT)
+=========================================================================
+
+Simulation finished,  1 warnings
+WARNING: THERE ARE ATOM-PAIRS WITH NO VDW INTERACTION Zn1-Zn1 Zn1-O1 Zn1-O2 Zn1-C1 Zn1-C2 Zn1-C3 Zn1-H1 O1-Zn1 O1-O2 O1-C1 O1-C2 O1-C3 O1-H1 O2-Zn1 O2-O1 O2-C1 O2-C2 O2-C3 O2-H1 C1-Zn1 C1-O1 C1-O2 C1-C2 C1-C3 C1-H1 C2-Zn1 C2-O1 C2-O2 C2-C1 C2-C3 C2-H1 C3-Zn1 C3-O1 C3-O2 C3-C1 C3-C2 C3-H1 H1-Zn1 H1-O1 H1-O2 H1-C1 H1-C2 H1-C3  (maximum 50 interactions shown)
+
+
+Tue Aug 23 04:07:24 2016
+Simulation finished on Tuesday, August 23.
+The end time was 04:07 AM.
+

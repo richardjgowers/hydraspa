@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-"""Parallel Raspa creator
+"""Parallel Raspa setup creator
 
 Usage:
-  paraspa split <dirname> <N>
-  paraspa check <dirname>
-  paraspa gather <dirname>
+  hydraspa split <dirname> <N>
+  hydraspa check <dirname>
+  hydraspa gather <dirname>
 
 Options:
   -h --help
@@ -15,10 +15,10 @@ from __future__ import print_function
 
 from docopt import docopt
 
-import paraspa as prsp
+import hydraspa as hrsp
 
 def do_gather(d):
-    out = prsp.gather(d)
+    out = hrsp.gather(d)
     for k, v in out.items():
         print("{}: {}".format(k, v.mean()))
 
@@ -27,8 +27,8 @@ if __name__ == '__main__':
     args = docopt(__doc__)
 
     if args['split']:
-        prsp.split(args['<dirname>'], int(args['<N>']))
+        hrsp.split(args['<dirname>'], int(args['<N>']))
     elif args['check']:
-        prsp.check(args['<dirname>'])
+        hrsp.check(args['<dirname>'])
     elif args['gather']:
         do_gather(args['<dirname>'])

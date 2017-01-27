@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-import paraspa as prsp
+import hydraspa as hrsp
 
 # known data from the files
 SERIES1 = [0.0, 1.5, 3.5, 10.0]
@@ -9,7 +9,7 @@ SERIES2 = [0.0, 2.2, 4.4, 6.6]
 
 @pytest.fixture
 def gather_results():
-    return prsp.gather('gth')
+    return hrsp.gather('gth')
 
 
 class TestGather(object):

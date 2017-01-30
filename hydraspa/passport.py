@@ -25,7 +25,7 @@ def create_passport(simdir):
 
     Returns
     -------
-    sha1 hash of the passport
+    sha1 hash (fingerprint) of the passport
     """
     # create tar of directory
     tfile = create_tar(simdir)
@@ -53,20 +53,23 @@ def create_tar(simdir):
 
 
 def create_hash(tarname):
-    """Calculate hash of a tar file
+    """Calculate hash of all contents of a tar file
 
     Note
     ----
     Uses only the leading 7 characters in the hash.
     """
-    # stolen from: https://gist.github.com/DaveCTurner/8765561
+    # adapted from: https://gist.github.com/DaveCTurner/8765561
+    hash = hashlib.sha1()
+
     with tarfile.open(tarname, 'r') as tar:
         for tarinfo in tar:
             if not tarinfo.isreg():
                 continue
             flo = tar.extractfile(tarinfo)
-            hash = hashlib.sha1()
             while True:
+                # potentially can't hash the entire data
+                # so read it bit by bit
                 data = flo.read(2**20)
                 if not data:
                     break

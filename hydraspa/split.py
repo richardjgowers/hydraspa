@@ -8,6 +8,9 @@ import os
 import shutil
 
 
+def static_pressure(line, amount):
+    return 'ExternalPressure {}\n'.format(amount * 1000.0)
+
 def static_cycles(line, amount):
     return 'NumberOfCycles {}\n'.format(amount)
 
@@ -19,7 +22,7 @@ def divide_cycles(line, factor):
     return line.replace(ncycles, str(newcycles))
     
 
-def split(src, ntasks, ncycles=None):
+def split(src, ntasks, ncycles=None, pressures=None):
     """Split simulation in *src* into *ntasks*
 
     Parameters
@@ -31,25 +34,37 @@ def split(src, ntasks, ncycles=None):
     ncycles : int, optional
       Manually set the number of cycles per simulation.  Otherwise
       use existing amount / ntasks
+    pressures : list, optional
+      Specify a list of pressures (in kPa) to create 
     """
     src = src.strip('/')
 
     newdirs = []
 
-    for i in range(ntasks):
-        newname = '{}_part_{}'.format(src, i+1)
-        newdirs.append(newname)
-        # Copy over everything
-        shutil.copytree(src, newname)
+    mod_pressures = pressures is not None
+    if not mod_pressures:
+        pressures = [None]
 
-        # Find and modify the simulation.input file
-        modifications = {}
-        if ncycles is None:
-            modifications['NumberOfCycles'] = partial(divide_cycles, factor=ntasks)
-        else:
-            modifications['NumberOfCycles'] = partial(static_cycles, amount=ncycles)
+    for p in pressures:
+        for i in range(ntasks):
+            if mod_pressures:
+                newname = '{}_P{}_part_{}'.format(src, p, i+1)
+            else:
+                newname = '{}_part_{}'.format(src, i+1)
+            newdirs.append(newname)
+            # Copy over everything
+            shutil.copytree(src, newname)
 
-        modify_raspa_input(newname, modifications)
+            # Find and modify the simulation.input file
+            modifications = {}
+            if ncycles is None:
+                modifications['NumberOfCycles'] = partial(divide_cycles, factor=ntasks)
+            else:
+                modifications['NumberOfCycles'] = partial(static_cycles, amount=ncycles)
+            if mod_pressures:
+                modifications['ExternalPressure'] = partial(static_pressure, amount=p)
+
+            modify_raspa_input(newname, modifications)
 
     make_qsubber_script(src, newdirs)
 

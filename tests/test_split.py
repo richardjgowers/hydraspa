@@ -12,6 +12,12 @@ def runlength(d):
             if 'NumberOfCycles' in line:
                 return int(line.split()[1])
 
+def pressure(d):
+    with open(os.path.join(d, 'simulation.input'), 'r') as f:
+        for line in f:
+            if 'ExternalPressure' in line:
+                return float(line.split()[1])
+
 # what a qsubber script should look like
 REF_QSUB = """\
 #!/bin/bash
@@ -71,3 +77,17 @@ class TestSplit(object):
 
         with open('qsub_mysim.sh', 'r') as f:
             assert f.read() == REF_QSUB
+
+    @pytest.mark.parametrize('ntasks,p', [
+        (1, [5, 10, 20]),
+        (2, [5, 10, 20]),
+    ])
+    def test_pressures(self, ntasks, p):
+        hrsp.split('mysim', ntasks=ntasks, pressures=p)
+
+        assert len(glob.glob('mysim_P*_part_*')) == ntasks * len(p)
+        assert os.path.exists('mysim_P10_part_1')
+
+        # check runlengths
+        # check pressures
+        assert pressure('mysim_P10_part_1') == 10000.0

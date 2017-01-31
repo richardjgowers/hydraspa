@@ -3,9 +3,18 @@
 """
 from __future__ import division
 
+from functools import partial
 import os
 import shutil
 
+
+def divide_cycles(line, factor):
+    ncycles = line.split()[1]
+
+    newcycles = 1 + (int(ncycles) // factor)
+
+    return line.replace(ncycles, str(newcycles))
+    
 
 def split(src, ntasks):
     """Split simulation in *src* into *ntasks*
@@ -28,28 +37,36 @@ def split(src, ntasks):
         shutil.copytree(src, newname)
 
         # Find and modify the simulation.input file
-        divide_runtime_by(newname, ntasks)
+        modifications = {
+            'NumberOfCycles': partial(divide_cycles, factor=ntasks),
+        }
+
+        modify_raspa_input(newname, modifications)
 
     make_qsubber_script(src, newdirs)
 
 
-def divide_runtime_by(src, factor):
-    """Look in *src* and divide the number of Cycles by *factor*"""
+def modify_raspa_input(src, mods):
+    """Modify the simulation.input file in *src* according to *mods*
+
+    Parameters
+    ----------
+    src : string
+      Raspa sim directory
+    mods : dict
+      Maps keywords to a function applied to the entire line, which
+      returns a replacement line
+    """
     simfile = os.path.join(src, 'simulation.input')
     # Create backup of old input file, why not..
     os.rename(simfile, simfile + '.bak')
 
     with open(simfile, 'w') as newfile, open(simfile + '.bak', 'r') as oldfile:
         for line in oldfile:
-            if not line.startswith('#') and 'NumberOfCycles' in line:
-                # find the number of cycles
-                ncycles = line.split()[1]
-                # floor division then add one
-                # ensures sum of runlengths is always *at least* the same length
-                newcycles = 1 + (int(ncycles) // factor)
-
-                line = line.replace(ncycles, str(newcycles))
-
+            if line.strip():
+                kw = line.split()[0]
+                if kw in mods:
+                    line = mods[kw](line)
             newfile.write(line)
 
 def make_qsubber_script(base, copies):

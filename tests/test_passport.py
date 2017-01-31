@@ -28,6 +28,15 @@ class TestPassports(object):
         assert os.path.exists('mysim.tar.gz')
         assert hrsp.passport.create_hash('mysim.tar.gz') == self.REFHASH
 
+    def test_hash_matches_uncompressed(self):
+        with tarfile.open('uncompressed.tar', 'w') as tf:
+            for f in glob.glob('mysim/*'):
+                tf.add(f)
+        assert hrsp.passport.create_hash('uncompressed.tar') == self.REFHASH
+
+    def test_passport_returned_hash(self):
+        assert hrsp.passport.create_passport('mysim') == self.REFHASH
+
     def test_hash_changes_when_file_removed(self):
         os.remove(os.path.join('mysim', 'file1.txt'))
 

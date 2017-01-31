@@ -1,4 +1,5 @@
 import glob
+import hashlib
 import os
 import pytest
 import shutil
@@ -33,6 +34,13 @@ class TestPassports(object):
             for f in glob.glob('mysim/*'):
                 tf.add(f)
         assert hrsp.passport.hash('uncompressed.tar') == self.REFHASH
+
+    def test_hash_matches_raw_files(self):
+        sha1 = hashlib.sha1()
+        for fn in glob.glob('mysim/*'):
+            with open(fn, 'r') as f:
+                sha1.update(f.read())
+        assert sha1.hexdigest()[:7] == self.REFHASH
 
     def test_passport_returned_hash(self):
         assert hrsp.passport.create_passport('mysim') == self.REFHASH

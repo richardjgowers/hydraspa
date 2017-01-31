@@ -27,6 +27,7 @@ def create_passport(simdir):
     -------
     sha1 hash (fingerprint) of the passport
     """
+    simdir = simdir.strip('/')
     # create tar of directory
     tfile = create_tar(simdir)
     # calculate hash of the tar
@@ -46,6 +47,7 @@ def create_tar(simdir):
     -------
     path to the tarfile
     """
+    simdir = simdir.strip('/')
     newname = os.path.basename(simdir) + '.tar.gz'
     with tarfile.open(newname, 'w:gz') as tar:
         tar.add(simdir, arcname=os.path.basename(simdir))

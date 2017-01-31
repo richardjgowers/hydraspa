@@ -2,13 +2,15 @@
 """Parallel Raspa setup creator
 
 Usage:
-  hydraspa split <dirname> <N>
+  hydraspa split <dirname> -N <N> [(-P <P>...)]
   hydraspa check <dirname>
   hydraspa gather <dirname>
 
 Options:
   -h --help
   --version
+  -n, --ntasks    Number of duplicates per pressure point
+  -P, --presures  Define list of pressures in kPa
 
 """
 from __future__ import print_function
@@ -27,6 +29,7 @@ if __name__ == '__main__':
     args = docopt(__doc__)
 
     if args['split']:
+        hrsp.passport.create_passport(args['<dirname>'])
         hrsp.split(args['<dirname>'], int(args['<N>']))
     elif args['check']:
         hrsp.check(args['<dirname>'])

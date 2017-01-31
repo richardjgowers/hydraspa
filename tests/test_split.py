@@ -25,7 +25,7 @@ qsub qsub.sh
 cd ../
 """
 
-@pytest.mark.usefixtures('rm_dirs')
+@pytest.mark.usefixtures('newdir')
 class TestSplit(object):
     FILES = ['file1.txt', 'file2.txt', 'simulation.input']
 

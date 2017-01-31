@@ -17,6 +17,8 @@ def split(src, ntasks):
     ntasks : int
       Number of copies of *src* to make
     """
+    src = src.strip('/')
+
     newdirs = []
 
     for i in range(ntasks):

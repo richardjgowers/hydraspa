@@ -31,7 +31,7 @@ def create_passport(simdir):
     # create tar of directory
     tfile = create_tar(simdir)
     # calculate hash of the tar
-    sha1 = create_hash(tfile)
+    sha1 = hash(tfile)
     # rename the tar to include hash
     os.rename(tfile, tfile[:-7] + '_{}.tar.gz'.format(sha1))
     # return hash
@@ -54,7 +54,7 @@ def create_tar(simdir):
     return newname
 
 
-def create_hash(tarname):
+def hash(tarname):
     """Calculate hash of all contents of a tar file
 
     Note

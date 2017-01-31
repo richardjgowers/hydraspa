@@ -8,6 +8,9 @@ import os
 import shutil
 
 
+def static_cycles(line, amount):
+    return 'NumberOfCycles {}\n'.format(amount)
+
 def divide_cycles(line, factor):
     ncycles = line.split()[1]
 
@@ -16,7 +19,7 @@ def divide_cycles(line, factor):
     return line.replace(ncycles, str(newcycles))
     
 
-def split(src, ntasks):
+def split(src, ntasks, ncycles=None):
     """Split simulation in *src* into *ntasks*
 
     Parameters
@@ -25,6 +28,9 @@ def split(src, ntasks):
       Name of the directory we wish to copy
     ntasks : int
       Number of copies of *src* to make
+    ncycles : int, optional
+      Manually set the number of cycles per simulation.  Otherwise
+      use existing amount / ntasks
     """
     src = src.strip('/')
 
@@ -37,9 +43,11 @@ def split(src, ntasks):
         shutil.copytree(src, newname)
 
         # Find and modify the simulation.input file
-        modifications = {
-            'NumberOfCycles': partial(divide_cycles, factor=ntasks),
-        }
+        modifications = {}
+        if ncycles is None:
+            modifications['NumberOfCycles'] = partial(divide_cycles, factor=ntasks)
+        else:
+            modifications['NumberOfCycles'] = partial(static_cycles, amount=ncycles)
 
         modify_raspa_input(newname, modifications)
 

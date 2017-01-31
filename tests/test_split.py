@@ -47,15 +47,18 @@ class TestSplit(object):
             for fn in self.FILES:
                 assert os.path.exists(os.path.join(d, fn))
 
-    @pytest.mark.parametrize('ntasks,expected', [
-        (2, 500001),
-        (3, 333334),
-        (4, 250001),
+    @pytest.mark.parametrize('ntasks,ncycles,expected', [
+        (2, None, 500001),  # divide 1M cycles by ntasks (+1)
+        (3, None, 333334),
+        (4, None, 250001),
+        (2, 10000, 10000),  # override division thingy
+        (4, 25000, 25000),
     ])
-    def test_check_runlength(self, ntasks, expected):
-        hrsp.split('mysim', ntasks=ntasks)
+    def test_check_runlength(self, ntasks, ncycles, expected):
+        hrsp.split('mysim', ntasks=ntasks, ncycles=ncycles)
 
-        for d in ('mysim_part_1', 'mysim_part_2'):
+        assert len(glob.glob('mysim_part_*')) == ntasks
+        for d in glob.glob('mysim_part_*'):
             assert runlength(d) == expected
 
     def test_check_qsubber_made(self):

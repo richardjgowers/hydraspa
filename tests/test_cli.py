@@ -1,6 +1,7 @@
 import contextlib
 from docopt import docopt
 import glob
+import itertools
 import os
 import pytest
 import shutil
@@ -71,3 +72,21 @@ class TestDocopt(object):
         args = docopt(doc, cmdstr.split())
 
         assert args['--ncycles'] == ncycles
+
+    @pytest.mark.parametrize('taskstyle', ['-n', '--ntasks'])
+    @pytest.mark.parametrize('pressurestyle', ['-P', '--pressures'])
+    @pytest.mark.parametrize('cyclestyle', ['-c', '--ncycles'])
+    @pytest.mark.parametrize('order', itertools.permutations(range(3), 3))
+    def test_reordering(self, taskstyle, pressurestyle, cyclestyle, order):
+        a = '{} 2'.format(taskstyle)
+        b = '{} 1234'.format(cyclestyle)
+        c = '{} 10 20'.format(pressurestyle)
+        opts = [a, b, c]
+
+        cmdstr = 'split this ' + ' '.join(opts[i] for i in order)
+        args = docopt(doc, cmdstr.split())
+
+        assert args['--ntasks'] == '2'
+        assert args['--ncycles'] == '1234'
+        assert args['<P>'] == ['10', '20']
+        

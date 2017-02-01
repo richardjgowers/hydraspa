@@ -40,11 +40,28 @@ class TestCLI(object):
 
 
 class TestDocopt(object):
-    @pytest.mark.parametrize('args', ['2', '3', '4'])
-    @pytest.mark.parametrize('style', ['-N', '--ntasks'])
-    def test_ntasks(self, args, style):
-        cmdstr = 'split this {} {}'.format(style, args)
+    @pytest.mark.parametrize('taskstyle', ['-N', '--ntasks'])
+    @pytest.mark.parametrize('ntasks', ['2', '3', '4'])
+    def test_ntasks(self, taskstyle, ntasks):
+        cmdstr = 'split this {} {}'.format(taskstyle, ntasks)
 
         args = docopt(doc, cmdstr.split())
 
         assert args['--ntasks']
+        assert args['<N>'] == ntasks
+        assert not args['--pressures']
+
+    @pytest.mark.parametrize('taskstyle', ['-N', '--ntasks'])
+    @pytest.mark.parametrize('ntasks', ['2', '3'])
+    @pytest.mark.parametrize('pressurestyle', ['-P', '--pressures'])
+    @pytest.mark.parametrize('pressures', ['10 20 30', '5 10 20'])
+    def test_pressures(self, taskstyle, ntasks, pressurestyle, pressures):
+        cmdstr = 'split this {} {} {} {}'.format(taskstyle, ntasks,
+                                                 pressurestyle, pressures)
+        args = docopt(doc, cmdstr.split())
+
+        assert args['--ntasks']
+        assert args['<N>'] == ntasks
+        assert args['--pressures']
+        assert args['<P>'] == pressures.split()
+

@@ -41,6 +41,11 @@ class TestCLI(object):
 
 
 class TestDocopt(object):
+    def test_default_ntasks(self):
+        args = docopt(doc, 'split this'.split())
+
+        assert args['--ntasks'] == '1'
+
     @pytest.mark.parametrize('taskstyle', ['-n', '--ntasks'])
     @pytest.mark.parametrize('ntasks', ['2', '3', '4'])
     def test_ntasks(self, taskstyle, ntasks):
@@ -73,20 +78,25 @@ class TestDocopt(object):
 
         assert args['--ncycles'] == ncycles
 
-    @pytest.mark.parametrize('taskstyle', ['-n', '--ntasks'])
-    @pytest.mark.parametrize('pressurestyle', ['-P', '--pressures'])
-    @pytest.mark.parametrize('cyclestyle', ['-c', '--ncycles'])
+    @pytest.mark.parametrize('tasks', ['', '-n 2', '--ntasks 2'])
+    @pytest.mark.parametrize('cycles', ['', '-c 1234', '--ncycles 1234'])
+    @pytest.mark.parametrize('pressures', ['', '-P 10 20', '--pressures 10 20'])
     @pytest.mark.parametrize('order', itertools.permutations(range(3), 3))
-    def test_reordering(self, taskstyle, pressurestyle, cyclestyle, order):
-        a = '{} 2'.format(taskstyle)
-        b = '{} 1234'.format(cyclestyle)
-        c = '{} 10 20'.format(pressurestyle)
-        opts = [a, b, c]
+    def test_reordering(self, tasks, cycles, pressures, order):
+        opts = [tasks, cycles, pressures]
 
         cmdstr = 'split this ' + ' '.join(opts[i] for i in order)
         args = docopt(doc, cmdstr.split())
 
-        assert args['--ntasks'] == '2'
-        assert args['--ncycles'] == '1234'
-        assert args['<P>'] == ['10', '20']
-        
+        if tasks:
+            assert args['--ntasks'] == '2'
+        else:
+            assert args['--ntasks'] == '1'
+        if cycles:
+            assert args['--ncycles'] == '1234'
+        else:
+            assert not args['--ncycles']
+        if pressures:
+            assert args['<P>'] == ['10', '20']
+        else:
+            assert not args['--pressures']

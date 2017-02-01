@@ -8,8 +8,8 @@ Usage:
 Options:
   -h --help
   --version
-  -n, --ntasks     Number of duplicates per pressure point
-  -c, --ncycles    Number of cycles to perform *each* sim for
-  -P, --pressures  Define list of pressures in kPa
+  -n NTASKS, --ntasks NTASKS      Number of duplicates per pressure point
+  -c NCYCLES, --ncycles NCYCLES   Number of cycles to perform *each* sim for
+  -P, --pressures                 Define list of pressures in kPa
 
 """

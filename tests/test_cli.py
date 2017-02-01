@@ -47,8 +47,7 @@ class TestDocopt(object):
 
         args = docopt(doc, cmdstr.split())
 
-        assert args['--ntasks']
-        assert args['<N>'] == ntasks
+        assert args['--ntasks'] == ntasks
         assert not args['--pressures']
 
     @pytest.mark.parametrize('taskstyle', ['-n', '--ntasks'])
@@ -60,8 +59,7 @@ class TestDocopt(object):
                                                  pressurestyle, pressures)
         args = docopt(doc, cmdstr.split())
 
-        assert args['--ntasks']
-        assert args['<N>'] == ntasks
+        assert args['--ntasks'] == ntasks
         assert args['--pressures']
         assert args['<P>'] == pressures.split()
 
@@ -72,5 +70,4 @@ class TestDocopt(object):
 
         args = docopt(doc, cmdstr.split())
 
-        assert args['--ncycles']
-        assert args['<C>'] == ncycles
+        assert args['--ncycles'] == ncycles

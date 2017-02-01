@@ -1,14 +1,15 @@
 """Parallel Raspa setup creator
 
 Usage:
-  hydraspa split <dirname> -N <N> [(-P <P>...)]
+  hydraspa split <dirname> -n <N> [(-c <C>) (-P <P>...)]
   hydraspa check <dirname>
   hydraspa gather <dirname>
 
 Options:
   -h --help
   --version
-  -N, --ntasks     Number of duplicates per pressure point
+  -n, --ntasks     Number of duplicates per pressure point
+  -c, --ncycles    Number of cycles to perform *each* sim for
   -P, --pressures  Define list of pressures in kPa
 
 """

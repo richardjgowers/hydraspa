@@ -18,7 +18,7 @@ class TestCLI(object):
     @pytest.mark.parametrize('path', ['mysim', 'mysim/'])
     @pytest.mark.parametrize('ntasks', ['2', '3', '4'])
     def test_cli(self, path, ntasks):
-        cmd = 'hydraspa split {path} -N {n}'.format(path=path, n=ntasks)
+        cmd = 'hydraspa split {path} -n {n}'.format(path=path, n=ntasks)
         call(cmd)
 
         # check we made enough sub folders
@@ -32,7 +32,7 @@ class TestCLI(object):
     @pytest.mark.parametrize('path', ['mysim', 'mysim/'])
     @pytest.mark.parametrize('pressures', ['10 20 30', '10 20'])
     def test_pressure_cli(self, path, pressures):
-        cmd = 'hydraspa split {path} -N 2 -P {pressures}'.format(
+        cmd = 'hydraspa split {path} -n 2 -P {pressures}'.format(
             path=path, pressures=pressures)
         call(cmd)
 
@@ -40,7 +40,7 @@ class TestCLI(object):
 
 
 class TestDocopt(object):
-    @pytest.mark.parametrize('taskstyle', ['-N', '--ntasks'])
+    @pytest.mark.parametrize('taskstyle', ['-n', '--ntasks'])
     @pytest.mark.parametrize('ntasks', ['2', '3', '4'])
     def test_ntasks(self, taskstyle, ntasks):
         cmdstr = 'split this {} {}'.format(taskstyle, ntasks)
@@ -51,7 +51,7 @@ class TestDocopt(object):
         assert args['<N>'] == ntasks
         assert not args['--pressures']
 
-    @pytest.mark.parametrize('taskstyle', ['-N', '--ntasks'])
+    @pytest.mark.parametrize('taskstyle', ['-n', '--ntasks'])
     @pytest.mark.parametrize('ntasks', ['2', '3'])
     @pytest.mark.parametrize('pressurestyle', ['-P', '--pressures'])
     @pytest.mark.parametrize('pressures', ['10 20 30', '5 10 20'])
@@ -65,3 +65,12 @@ class TestDocopt(object):
         assert args['--pressures']
         assert args['<P>'] == pressures.split()
 
+    @pytest.mark.parametrize('cyclestyle', ['-c', '--ncycles'])
+    @pytest.mark.parametrize('ncycles', ['100', '250'])
+    def test_ncycles(self, cyclestyle, ncycles):
+        cmdstr = 'split this -n 2 {} {} -P 10 20'.format(cyclestyle, ncycles)
+
+        args = docopt(doc, cmdstr.split())
+
+        assert args['--ncycles']
+        assert args['<C>'] == ncycles

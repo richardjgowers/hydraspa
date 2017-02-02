@@ -2,6 +2,11 @@
 
 
 """
+import numpy as np
+
+
+class NotEquilibratedError(ValueError):
+    pass
 
 
 def split_around(sig, thresh):
@@ -15,8 +20,17 @@ def split_around(sig, thresh):
 
 
 def check_flat(signal):
-    # todo: check that this signal is flat
-    pass
+    x0, c = np.polyfit(signal.index, signal.values, 1)
+
+    y0 = c + x0 * signal.index[0]
+    y1 = c + x0 * signal.index[-1]
+
+    totdrift = 100 * abs((y1 - y0) / signal.mean())
+
+    if (x0 > 1e-4) and (totdrift > 5):
+        raise NotEquilibratedError("Total drift was {}%".format(totdrift))
+    else:
+        return True
 
 
 def find_equilibrium(signal):

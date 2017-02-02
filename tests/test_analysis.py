@@ -127,10 +127,10 @@ class TestFindEQ(object):
 
 class TestFindTau(object):
     @pytest.mark.parametrize('tau', [100, 200, 500])
-    @pytest.mark.parametrize('length', [15, 30, 50])
+    @pytest.mark.parametrize('length', [150, 300, 500])
     def test_tau(self, tau, length):
         sig = gen_tau_signal(tau, length)
 
         exp = 0.6 * tau
 
-        assert analyse.find_tau(sig) == pytest.approx(exp, rel=0.1)
+        assert analyse.find_tau(sig) == pytest.approx(exp, rel=0.05)

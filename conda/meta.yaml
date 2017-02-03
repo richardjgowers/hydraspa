@@ -1,0 +1,23 @@
+package:
+  name: hydraspa
+  version: 0.0.2
+
+source:
+  path: ../
+
+requirements:
+  build:
+    - python
+    - setuptools
+
+  run:
+    - python
+    - docopt
+    - numpy
+    - pandas
+    - scipy
+    - statsmodels
+
+test:
+  imports:
+    - hydraspa

@@ -2,3 +2,6 @@
 *.pyo
 *~
 .cache*
+build/*
+dist/*
+*.egg-info/*

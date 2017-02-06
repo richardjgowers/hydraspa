@@ -10,6 +10,13 @@ import subprocess
 from hydraspa.cli import __doc__ as doc
 
 
+def runlength(d):
+    with open(os.path.join(d, 'simulation.input'), 'r') as f:
+        for line in f:
+            if 'NumberOfCycles' in line:
+                return int(line.split()[1])
+
+
 def call(command):
     subprocess.call(command.split())
 
@@ -29,7 +36,6 @@ class TestCLI(object):
         # check the passport was made
         assert len(glob.glob('mysim*.tar.gz')) == 1
 
-
     @pytest.mark.parametrize('path', ['mysim', 'mysim/'])
     @pytest.mark.parametrize('pressures', ['10 20 30', '10 20', '1.5 3.0'])
     def test_pressure_cli(self, path, pressures):
@@ -38,6 +44,16 @@ class TestCLI(object):
         call(cmd)
 
         assert len(glob.glob('mysim_P*_part*')) == len(pressures.split()) * 2
+
+    @pytest.mark.parametrize('path', ['mysim', 'mysim/'])
+    @pytest.mark.parametrize('cycles', ['-c 100', '--ncycles 100'])
+    def test_cycles_cli(self, path, cycles):
+        cmd = 'hydraspa split {path} -n 2 {cyc}'.format(
+            path=path, cyc=cycles)
+        call(cmd)
+
+        for d in ['mysim_part1', 'mysim_part2']:
+            assert runlength(d) == 100
 
 
 class TestDocopt(object):

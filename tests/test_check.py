@@ -18,16 +18,16 @@ class TestCheck(object):
         hrsp.check('chk')
         out, err = capsys.readouterr()
 
-        assert ' - chk_part_1 is FINISHED' in out.split('\n')
+        assert ' - chk_part1 is FINISHED' in out.split('\n')
 
     def test_finds_in_progress(self, capsys):
         hrsp.check('chk')
         out, err = capsys.readouterr()
 
-        assert ' - chk_part_3 is IN PROGRESS' in out.split('\n')
+        assert ' - chk_part3 is IN PROGRESS' in out.split('\n')
 
     def test_finds_incomplete(self, capsys):
         hrsp.check('chk')
         out, err = capsys.readouterr()
 
-        assert ' - chk_part_2 is NOT STARTED' in out.split('\n')
+        assert ' - chk_part2 is NOT STARTED' in out.split('\n')

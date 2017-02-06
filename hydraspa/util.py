@@ -11,6 +11,8 @@ STATUSES = {
     2: 'NOT STARTED',
 }
 
+DIR_PATTERN = "{root}*_part*"
+
 def is_finished(dirname):
     """Check if raspa simulation in *dirname* finished"""
     # fn of output file

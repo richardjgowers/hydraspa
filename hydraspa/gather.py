@@ -2,7 +2,7 @@ import glob
 import os
 import numpy as np
 
-from .util import is_finished
+from .util import DIR_PATTERN, is_finished
 
 def gather(dirname):
     """Gather the results from all dirs starting with dirname
@@ -16,7 +16,7 @@ def gather(dirname):
     -------
     dict of childname: np array of results
     """
-    children = glob.glob('{}_part_*'.format(dirname))
+    children = glob.glob(DIR_PATTERN.format(root=dirname))
 
     output = {}
 

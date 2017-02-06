@@ -48,9 +48,9 @@ def split(src, ntasks, ncycles=None, pressures=None):
     for p in pressures:
         for i in range(ntasks):
             if mod_pressures:
-                newname = '{}_P{}_part_{}'.format(src, p, i+1)
+                newname = '{}_P{}_part{}'.format(src, p, i+1)
             else:
-                newname = '{}_part_{}'.format(src, i+1)
+                newname = '{}_part{}'.format(src, i+1)
             newdirs.append(newname)
             # Copy over everything
             shutil.copytree(src, newname)

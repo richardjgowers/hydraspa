@@ -22,11 +22,11 @@ def pressure(d):
 REF_QSUB = """\
 #!/bin/bash
 
-cd mysim_part_1
+cd mysim_part1
 qsub qsub.sh
 cd ../
 
-cd mysim_part_2
+cd mysim_part2
 qsub qsub.sh
 cd ../
 """
@@ -41,15 +41,15 @@ class TestSplit(object):
 
         # check that required directories were made
         for i in range(ntasks):
-            assert os.path.exists('mysim_part_{}'.format(i + 1))
-        assert not os.path.exists('mysim_part_{}'.format(i + 2))
+            assert os.path.exists('mysim_part{}'.format(i + 1))
+        assert not os.path.exists('mysim_part{}'.format(i + 2))
 
     def test_split_files(self):
         hrsp.split('mysim', ntasks=2)
 
         # check that each directory made had all the required files
 
-        for d in ('mysim_part_1', 'mysim_part_2'):
+        for d in ('mysim_part1', 'mysim_part2'):
             for fn in self.FILES:
                 assert os.path.exists(os.path.join(d, fn))
 
@@ -63,8 +63,8 @@ class TestSplit(object):
     def test_check_runlength(self, ntasks, ncycles, expected):
         hrsp.split('mysim', ntasks=ntasks, ncycles=ncycles)
 
-        assert len(glob.glob('mysim_part_*')) == ntasks
-        for d in glob.glob('mysim_part_*'):
+        assert len(glob.glob('mysim_part*')) == ntasks
+        for d in glob.glob('mysim_part*'):
             assert runlength(d) == expected
 
     def test_check_qsubber_made(self):
@@ -83,9 +83,9 @@ class TestSplit(object):
     def test_pressures(self, ntasks, p):
         hrsp.split('mysim', ntasks=ntasks, pressures=p)
 
-        assert len(glob.glob('mysim_P*_part_*')) == ntasks * len(p)
-        assert os.path.exists('mysim_P10_part_1')
+        assert len(glob.glob('mysim_P*_part*')) == ntasks * len(p)
+        assert os.path.exists('mysim_P10_part1')
 
         # check runlengths
         # check pressures
-        assert pressure('mysim_P10_part_1') == 10000.0
+        assert pressure('mysim_P10_part1') == 10000.0

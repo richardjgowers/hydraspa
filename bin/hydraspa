@@ -35,3 +35,5 @@ if __name__ == '__main__':
         hrsp.check(args['<dirname>'])
     elif args['gather']:
         do_gather(args['<dirname>'])
+    elif args['--version']:
+        print(hrsp.__version__)

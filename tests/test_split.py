@@ -12,6 +12,13 @@ def runlength(d):
             if 'NumberOfCycles' in line:
                 return int(line.split()[1])
 
+def eq_length(d):
+    with open(os.path.join(d, 'simulation.input'), 'r') as f:
+        for line in f:
+            if 'NumberOfInitializationCycles' in line:
+                return int(line.split()[1])
+
+
 def pressure(d):
     with open(os.path.join(d, 'simulation.input'), 'r') as f:
         for line in f:
@@ -66,6 +73,20 @@ class TestSplit(object):
         assert len(glob.glob('mysim_part*')) == ntasks
         for d in glob.glob('mysim_part*'):
             assert runlength(d) == expected
+
+    def test_eq_length(self):
+        # hack the equilibration length to be 100
+        with open('mysim/simulation.input', 'r') as inf, open('new', 'w') as new:
+            for line in inf:
+                if line.startswith('NumberOfInit'):
+                    line = 'NumberOfInitializationCycles  100\n'
+                new.write(line)
+        shutil.move('new', 'mysim/simulation.input')
+
+        hrsp.split('mysim', ntasks=2, ncycles=100)
+
+        for d in glob.glob('mysim_part*'):
+            assert eq_length(d) == 0
 
     def test_check_qsubber_made(self):
         hrsp.split('mysim', ntasks=2)

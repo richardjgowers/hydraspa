@@ -14,6 +14,10 @@ def static_pressure(line, amount):
 def static_cycles(line, amount):
     return 'NumberOfCycles {}\n'.format(amount)
 
+def zero_init(line):
+    # whatever it was, it's zero now
+    return 'NumberOfInitializationCycles 0\n'
+
 def divide_cycles(line, factor):
     ncycles = line.split()[1]
 
@@ -57,6 +61,7 @@ def split(src, ntasks, ncycles=None, pressures=None):
 
             # Find and modify the simulation.input file
             modifications = {}
+            modifications['NumberOfInitializationCycles'] = zero_init
             if ncycles is None:
                 modifications['NumberOfCycles'] = partial(divide_cycles, factor=ntasks)
             else:
@@ -91,6 +96,7 @@ def modify_raspa_input(src, mods):
                 if kw in mods:
                     line = mods[kw](line)
             newfile.write(line)
+
 
 def make_qsubber_script(base, copies):
     with open('qsub_{}.sh'.format(base), 'w') as out:

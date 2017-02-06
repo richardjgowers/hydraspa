@@ -78,10 +78,8 @@ class TestSplit(object):
         with open('qsub_mysim.sh', 'r') as f:
             assert f.read() == REF_QSUB
 
-    @pytest.mark.parametrize('ntasks,p', [
-        (1, [5, 10, 20]),
-        (2, [5, 10, 20]),
-    ])
+    @pytest.mark.parametrize('ntasks', [1, 2])
+    @pytest.mark.parametrize('p', [[5, 10, 20], [5.5, 10, 20]])
     def test_pressures(self, ntasks, p):
         hrsp.split('mysim', ntasks=ntasks, pressures=p)
 

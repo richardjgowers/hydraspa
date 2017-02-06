@@ -18,7 +18,7 @@ if __name__ == '__main__':
     if args['split']:
         # pressures?
         if args['--pressures']:
-            pressures = map(int, args['<P>'])
+            pressures = map(float, args['<P>'])
         else:
             pressures = None
 

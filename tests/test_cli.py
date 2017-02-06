@@ -31,7 +31,7 @@ class TestCLI(object):
 
 
     @pytest.mark.parametrize('path', ['mysim', 'mysim/'])
-    @pytest.mark.parametrize('pressures', ['10 20 30', '10 20'])
+    @pytest.mark.parametrize('pressures', ['10 20 30', '10 20', '1.5 3.0'])
     def test_pressure_cli(self, path, pressures):
         cmd = 'hydraspa split {path} -n 2 -P {pressures}'.format(
             path=path, pressures=pressures)

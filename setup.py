@@ -8,7 +8,7 @@ with open(os.path.join(here, 'README.rst'), 'r') as f:
 
 setup(
     name='hydraspa',
-    version='0.0.2',
+    version='0.0.3',
     long_description=long_description,
 
     packages=find_packages(),

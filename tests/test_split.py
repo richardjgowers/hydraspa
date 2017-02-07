@@ -109,4 +109,4 @@ class TestSplit(object):
 
         # check runlengths
         # check pressures
-        assert pressure('mysim_P10_part1') == 10000.0
+        assert pressure('mysim_P10_part1') == 10.0

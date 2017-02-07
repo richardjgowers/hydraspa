@@ -4,6 +4,7 @@ from __future__ import print_function
 from docopt import docopt
 
 import hydraspa as hrsp
+from hydraspa.util import conv_to_number
 
 
 def do_gather(d):
@@ -16,13 +17,13 @@ if __name__ == '__main__':
     args = docopt(hrsp.cli.__doc__)
 
     if args['split']:
-        # pressures?
         if args['--pressures']:
-            pressures = map(float, args['<P>'])
+            pressures = [conv_to_number(v, float)
+                         for v in args['<P>']]
         else:
             pressures = None
         if args['--ncycles']:
-            cycles = int(args['--ncycles'])
+            cycles = conv_to_number(args['--ncycles'], int)
         else:
             cycles = None
 

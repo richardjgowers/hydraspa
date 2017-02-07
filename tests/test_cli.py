@@ -16,6 +16,11 @@ def runlength(d):
             if 'NumberOfCycles' in line:
                 return int(line.split()[1])
 
+def pressure(d):
+    with open(os.path.join(d, 'simulation.input'), 'r') as f:
+        for line in f:
+            if 'ExternalPressure' in line:
+                return float(line.split()[1])
 
 def call(command):
     subprocess.call(command.split())
@@ -37,23 +42,30 @@ class TestCLI(object):
         assert len(glob.glob('mysim*.tar.gz')) == 1
 
     @pytest.mark.parametrize('path', ['mysim', 'mysim/'])
-    @pytest.mark.parametrize('pressures', ['10 20 30', '10 20', '1.5 3.0'])
-    def test_pressure_cli(self, path, pressures):
-        cmd = 'hydraspa split {path} -n 2 -P {pressures}'.format(
-            path=path, pressures=pressures)
+    @pytest.mark.parametrize('pstyle', ['-P', '--pressures'])
+    @pytest.mark.parametrize('pressures',
+        ['11.1 10000 30000', '11.1 10k 0.03M', '0.0111k 10000 30k']
+    )
+    def test_pressure_cli(self, path, pstyle, pressures):
+        cmd = 'hydraspa split {path} -n 2 {psty} {pressures}'.format(
+            path=path, psty=pstyle, pressures=pressures)
         call(cmd)
 
-        assert len(glob.glob('mysim_P*_part*')) == len(pressures.split()) * 2
+        assert len(glob.glob('mysim_P*_part*')) == 6
+        assert pressure('mysim_P11.1_part1') == 11.1
+        assert pressure('mysim_P10000.0_part1') == 10000.
+        assert pressure('mysim_P30000.0_part1') == 30000.
 
     @pytest.mark.parametrize('path', ['mysim', 'mysim/'])
-    @pytest.mark.parametrize('cycles', ['-c 100', '--ncycles 100'])
-    def test_cycles_cli(self, path, cycles):
-        cmd = 'hydraspa split {path} -n 2 {cyc}'.format(
-            path=path, cyc=cycles)
+    @pytest.mark.parametrize('cycles', ['-c', '--ncycles'])
+    @pytest.mark.parametrize('ncycles', ['900000', '900k', '0.9M'])
+    def test_cycles_cli(self, path, cycles, ncycles):
+        cmd = 'hydraspa split {path} -n 2 {cyc} {ncyc}'.format(
+            path=path, cyc=cycles, ncyc=ncycles)
         call(cmd)
 
         for d in ['mysim_part1', 'mysim_part2']:
-            assert runlength(d) == 100
+            assert runlength(d) == 900000
 
 
 class TestDocopt(object):

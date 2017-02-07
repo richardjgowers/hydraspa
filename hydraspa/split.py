@@ -9,7 +9,7 @@ import shutil
 
 
 def static_pressure(line, amount):
-    return 'ExternalPressure {}\n'.format(amount * 1000.0)
+    return 'ExternalPressure {}\n'.format(amount)
 
 def static_cycles(line, amount):
     return 'NumberOfCycles {}\n'.format(amount)

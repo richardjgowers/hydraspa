@@ -1,7 +1,9 @@
 """Common functions for this stuff
 
 """
+from collections import namedtuple
 import glob
+import re
 import os
 
 
@@ -12,6 +14,8 @@ STATUSES = {
 }
 
 DIR_PATTERN = "{root}*_part*"
+
+Result = namedtuple('Result', ['path', 'root', 'fingerprint', 'pressure', 'partnumber'])
 
 def is_finished(dirname):
     """Check if raspa simulation in *dirname* finished"""
@@ -58,3 +62,19 @@ def conv_to_number(val, conv):
 
     # apply float first, so ('5.4k', int) -> int(float(5.4) * 1000)
     return conv(float(val) * multi)
+
+
+def discover(root):
+    """Find all children of *root*
+
+    Returns
+    -------
+    List of namedtuple of (path, root, fingerprint, pressure, partnumber)
+    """
+    # root, 7digit fingerprint, maybe a pressure, part number
+    pat = '(\w+?)_(\w{7})(?:_P(.+?))?_part(\d+)'
+    all_results = (re.match(pat, val) for val in os.listdir('.')
+                   if os.path.isdir(val))
+    results = [Result(*((m.string,) + m.groups()))
+               for m in all_results if (not m is None and m.groups()[0] == root)]
+    return results

@@ -27,11 +27,14 @@ if __name__ == '__main__':
         else:
             cycles = None
 
-        hrsp.passport.create_passport(args['<dirname>'])
-        hrsp.split(args['<dirname>'],
-                   int(args['--ntasks']),
-                   ncycles=cycles,
-                   pressures=pressures)
+        fingerprint = hrsp.passport.create_passport(args['<dirname>'])
+        hrsp.split(
+            src=args['<dirname>'],
+            fingerprint=fingerprint,
+            ntasks=int(args['--ntasks']),
+            ncycles=cycles,
+            pressures=pressures
+        )
     elif args['check']:
         hrsp.check(args['<dirname>'])
     elif args['gather']:

@@ -26,13 +26,15 @@ def divide_cycles(line, factor):
     return line.replace(ncycles, str(newcycles))
     
 
-def split(src, ntasks, ncycles=None, pressures=None):
+def split(src, fingerprint, ntasks, ncycles=None, pressures=None):
     """Split simulation in *src* into *ntasks*
 
     Parameters
     ----------
     src : string
       Name of the directory we wish to copy
+    fingerprint : string
+      Unique identifier for this setup
     ntasks : int
       Number of copies of *src* to make
     ncycles : int, optional
@@ -52,9 +54,9 @@ def split(src, ntasks, ncycles=None, pressures=None):
     for p in pressures:
         for i in range(ntasks):
             if mod_pressures:
-                newname = '{}_P{}_part{}'.format(src, p, i+1)
+                newname = '{}_{}_P{}_part{}'.format(src, fingerprint, p, i+1)
             else:
-                newname = '{}_part{}'.format(src, i+1)
+                newname = '{}_{}_part{}'.format(src, fingerprint, i+1)
             newdirs.append(newname)
             # Copy over everything
             shutil.copytree(src, newname)

@@ -75,4 +75,7 @@ def discover(root):
                    if os.path.isdir(val))
     results = [Result(*((m.string,) + m.groups()))
                for m in all_results if (not m is None and m.groups()[0] == root)]
+    # Sort results by pressure, then within each pressure the partnumber
+    results = sorted(results, key=lambda x: (x.pressure, x.partnumber))
+
     return results

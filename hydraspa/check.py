@@ -9,7 +9,6 @@ from .util import discover, STATUSES, is_finished
 def check(dirname):
     """Check the progress of tasks starting with *dirname*"""
     children = discover(dirname)
-    children = sorted(children, key=lambda x: (x.pressure, x.partnumber))
 
     alldone = True
 

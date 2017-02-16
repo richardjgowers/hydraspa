@@ -51,10 +51,10 @@ class TestCLI(object):
             path=path, psty=pstyle, pressures=pressures)
         call(cmd)
 
-        assert len(glob.glob('mysim_P*_part*')) == 6
-        assert pressure('mysim_P11.1_part1') == 11.1
-        assert pressure('mysim_P10000.0_part1') == 10000.
-        assert pressure('mysim_P30000.0_part1') == 30000.
+        assert len(glob.glob('mysim_4033d12_P*_part*')) == 6
+        assert pressure('mysim_4033d12_P11.1_part1') == 11.1
+        assert pressure('mysim_4033d12_P10000.0_part1') == 10000.
+        assert pressure('mysim_4033d12_P30000.0_part1') == 30000.
 
     @pytest.mark.parametrize('path', ['mysim', 'mysim/'])
     @pytest.mark.parametrize('cycles', ['-c', '--ncycles'])
@@ -64,7 +64,7 @@ class TestCLI(object):
             path=path, cyc=cycles, ncyc=ncycles)
         call(cmd)
 
-        for d in ['mysim_part1', 'mysim_part2']:
+        for d in ['mysim_4033d12_part1', 'mysim_4033d12_part2']:
             assert runlength(d) == 900000
 
 

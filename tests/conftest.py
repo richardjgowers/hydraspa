@@ -14,12 +14,12 @@ def indir(d):
         os.chdir(olddir)
 
 
-@pytest.fixture(params=['chk_part{}', 'chk_P1.2_part{}'])
+@pytest.fixture(params=['chk_1234567_part{}', 'chk_1234567_P1.2_part{}'])
 def chk_dirs(request, tmpdir):
     template = request.param
     for i in ('1', '2', '3'):
         shutil.copytree(
-            'chk_part{}'.format(i),
+            'chk_1234567_part{}'.format(i),
             tmpdir.join(template.format(i)).strpath
         )
     with indir(tmpdir.strpath):
@@ -33,3 +33,7 @@ def newdir(tmpdir):
     shutil.copy('premade_mysim.tar.gz', tmpdir.strpath)
     with indir(tmpdir.strpath):
         yield
+
+@pytest.fixture
+def REFHASH():
+    return '4033d12'

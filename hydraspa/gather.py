@@ -2,7 +2,7 @@ import glob
 import os
 import numpy as np
 
-from .util import DIR_PATTERN, is_finished
+from .util import discover, is_finished
 
 def gather(dirname):
     """Gather the results from all dirs starting with dirname
@@ -16,14 +16,14 @@ def gather(dirname):
     -------
     dict of childname: np array of results
     """
-    children = glob.glob(DIR_PATTERN.format(root=dirname))
+    children = discover(dirname)
 
     output = {}
 
     for child in children:
-        if is_finished(child) == 2:  # skip unfinished directories
+        if is_finished(child.path) == 2:  # skip unfinished directories
             continue
-        output[child] = parse_output(child)
+        output[child.path] = parse_output(child.path)
 
     return output
 

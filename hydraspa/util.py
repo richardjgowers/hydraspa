@@ -13,8 +13,6 @@ STATUSES = {
     2: 'NOT STARTED',
 }
 
-DIR_PATTERN = "{root}*_part*"
-
 Result = namedtuple('Result', ['path', 'root', 'fingerprint', 'pressure', 'partnumber'])
 
 def is_finished(dirname):

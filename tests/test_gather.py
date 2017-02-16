@@ -9,7 +9,7 @@ SERIES2 = [0.0, 2.2, 4.4, 6.6]
 
 @pytest.fixture
 def gather_results():
-    return hrsp.gather('gth')
+    return hrsp.gather.gather('gth')
 
 
 class TestGather(object):
@@ -25,3 +25,10 @@ class TestGather(object):
     def test_parsed_values(self, gather_results):
         assert all(gather_results['gth_1234567_part1'] == SERIES1)
         assert all(gather_results['gth_1234567_part2'] == SERIES2)
+
+
+
+@pytest.fixture
+def gather_dir():
+    with mock.patch('hydraspa.gather.parse_output') as po:
+        pass

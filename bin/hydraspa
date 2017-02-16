@@ -8,7 +8,7 @@ from hydraspa.util import conv_to_number
 
 
 def do_gather(d):
-    out = hrsp.gather(d)
+    out = hrsp.gather.gather(d)
     for k, v in out.items():
         print("{}: {}".format(k, v.mean()))
 

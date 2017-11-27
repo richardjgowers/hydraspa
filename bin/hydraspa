@@ -16,12 +16,27 @@ def do_gather(d):
 if __name__ == '__main__':
     args = docopt(hrsp.cli.__doc__)
 
-    if args['split']:
-        if args['--pressures']:
-            pressures = [conv_to_number(v, float)
-                         for v in args['<P>']]
-        else:
-            pressures = None
+    if args['list']:
+        # must be one of structures, gases or forcefields
+        if args['structures']:
+            pass
+        elif args['gases']:
+            pass
+        elif args['forcefields']:
+            pass
+    elif args['create']:
+        hrsp.create(
+            structure=args['<struc>'],
+            gas=args['<gas>'],
+            forcefield=args['<ff>'],
+            outdir=args['<outdir>'],
+        )
+    elif args['split']:
+        pressures = [conv_to_number(v, float)
+                     for v in args['<P>'].split(',')]
+        temperatures = [conv_to_number(v, float)
+                        for v in args['<T>'].split(',')]
+
         if args['--ncycles']:
             cycles = conv_to_number(args['--ncycles'], int)
         else:

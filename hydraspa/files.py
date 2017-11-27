@@ -4,13 +4,12 @@
 
 from functools import partial
 import glob
-import pkg_resources
+from pkg_resources import resource_filename, resource_listdir
 import os
 import re
 
-def _rf(fn):
-    return pkg_resources.resource_filename(__package__,
-                                           os.path.join('structures', fn))
+def _struc_rf(fn):
+    return resource_filename(__package__, os.path.join('structures', fn))
 
 def structure_name(filename):
     try:
@@ -22,8 +21,12 @@ def structure_name(filename):
 
 # map structure name to file path
 structures = {
-    structure_name(fn): _rf(fn)
-    for fn in pkg_resources.resource_listdir(__package__, 'structures')
+    structure_name(fn): _struc_rf(fn)
+    for fn in resource_listdir(__package__, 'structures')
 }
 
 gases = dict()
+
+forcefields = {
+    'UFF': resource_filename(__package__, os.path.join('forcefields', 'uff.def'))
+}

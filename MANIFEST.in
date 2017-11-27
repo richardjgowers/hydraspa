@@ -1,1 +1,2 @@
 include hydraspa/structures/*.cif
+include hydraspa/forcefields/*.def

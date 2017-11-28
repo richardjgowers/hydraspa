@@ -33,7 +33,7 @@ def _gas_rf(name):
             _rf(os.path.join('gases', 'pseudo_' + name + '.def')))
 
 gases = {
-    nm: _gas_rf(nm) for nm in ('Ar', 'CO2', 'N2', 'helium', 'methane')
+    nm.upper(): _gas_rf(nm) for nm in ('Ar', 'CO2', 'N2', 'helium')
 }
 
 

@@ -19,11 +19,14 @@ if __name__ == '__main__':
     if args['list']:
         # must be one of structures, gases or forcefields
         if args['structures']:
-            pass
+            for k in sorted(hrsp.files.structures):
+                print(k)
         elif args['gases']:
-            pass
+            for k in sorted(hrsp.files.gases):
+                print(k)
         elif args['forcefields']:
-            pass
+            for k in sorted(hrsp.files.forcefields):
+                print(k)
     elif args['create']:
         hrsp.create(
             structure=args['<struc>'],
@@ -48,7 +51,8 @@ if __name__ == '__main__':
             fingerprint=fingerprint,
             ntasks=int(args['--ntasks']),
             ncycles=cycles,
-            pressures=pressures
+            pressures=pressures,
+            temperatures=temperatures,
         )
     elif args['check']:
         hrsp.check(args['<dirname>'])

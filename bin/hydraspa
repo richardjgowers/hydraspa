@@ -29,10 +29,10 @@ if __name__ == '__main__':
                 print(k)
     elif args['create']:
         hrsp.create(
-            structure=args['<struc>'],
-            gas=args['<gas>'],
-            forcefield=args['<ff>'],
-            outdir=args['<outdir>'],
+            structure=args['-s'],
+            gas=args['-g'],
+            forcefield=args['-f'],
+            outdir=args['-o'],
         )
     elif args['split']:
         pressures = [conv_to_number(v, float)

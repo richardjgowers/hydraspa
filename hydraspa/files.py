@@ -23,7 +23,7 @@ def structure_name(filename):
 
 # map structure name to file path
 structures = {
-    structure_name(fn): _struc_rf(fn)
+    structure_name(fn).upper(): _struc_rf(fn)
     for fn in resource_listdir(__package__, 'structures')
 }
 
@@ -66,8 +66,7 @@ CutOffVDW                     11.0
 ChargeMethod                  Ewald
 CutOffChargeCharge            11.0
 EwaldPrecision                1e-6
-
-#UseChargesFromCIFFile         yes
+UseChargesFromCIFFile         yes
 
 Framework 0
 FrameworkName %%STRUCTURENAME%%

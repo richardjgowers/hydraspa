@@ -18,9 +18,9 @@ def create(structure, gas, forcefield, outdir):
     outdir : str
       where to put the template
     """
-    struc_file = files.structures[structure]
-    gas_files = files.gases[gas]
-    ff_file = files.forcefields[forcefield]
+    struc_file = files.structures[structure.upper()]
+    gas_files = files.gases[gas.upper()]
+    ff_file = files.forcefields[forcefield.upper()]
 
     os.makedirs(outdir)
     # structure files

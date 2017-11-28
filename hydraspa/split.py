@@ -34,7 +34,7 @@ def divide_cycles(line, factor):
     return line.replace(ncycles, str(newcycles))
 
 
-def split(src, fingerprint, pressures, temperatures, ntasks, ncycles=None):
+def split(src, fingerprint, temperatures, pressures, ntasks, ncycles=None):
     """Split simulation in src into various conditions
 
     Parameters
@@ -43,10 +43,10 @@ def split(src, fingerprint, pressures, temperatures, ntasks, ncycles=None):
       Name of the directory we wish to copy
     fingerprint : string
       Unique identifier for this setup
-    pressures : list
-      Specify a list of pressures (in kPa) to create
     temperatures : list
       List of temperatures (in K) to create
+    pressures : list
+      Specify a list of pressures (in kPa) to create
     ntasks : int
       Number of copies of *src* to make
     ncycles : int, optional

@@ -15,11 +15,11 @@ def _struc_rf(fn):
 
 def structure_name(filename):
     try:
-        # will strip _clean etc from filenames to give CSD reference
-        return re.search('(\w+?)(?:_.+?)?.cif', filename).groups()[0]
+        # will strip '_clean' etc from filenames to give CSD reference
+        return re.match('^(\w+?)(?:_.+?)?.cif', filename).groups()[0]
     except:
         # some non CSD filenames included in coremof
-        return filename
+        return os.path.splitext(filename)[0]
 
 # map structure name to file path
 structures = {

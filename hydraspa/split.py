@@ -3,6 +3,7 @@
 """
 from __future__ import division
 
+import itertools
 from functools import partial
 import os
 import shutil
@@ -11,12 +12,19 @@ import shutil
 def static_pressure(line, amount):
     return 'ExternalPressure {}\n'.format(amount)
 
+
+def static_temperature(line, amount):
+    return 'ExternalTemperature {}\n'.format(amount)
+
+
 def static_cycles(line, amount):
     return 'NumberOfCycles {}\n'.format(amount)
+
 
 def zero_init(line):
     # whatever it was, it's zero now
     return 'NumberOfInitializationCycles 0\n'
+
 
 def divide_cycles(line, factor):
     ncycles = line.split()[1]
@@ -24,10 +32,10 @@ def divide_cycles(line, factor):
     newcycles = 1 + (int(ncycles) // factor)
 
     return line.replace(ncycles, str(newcycles))
-    
 
-def split(src, fingerprint, ntasks, ncycles=None, pressures=None):
-    """Split simulation in *src* into *ntasks*
+
+def split(src, fingerprint, pressures, temperatures, ntasks, ncycles=None):
+    """Split simulation in src into various conditions
 
     Parameters
     ----------
@@ -35,43 +43,42 @@ def split(src, fingerprint, ntasks, ncycles=None, pressures=None):
       Name of the directory we wish to copy
     fingerprint : string
       Unique identifier for this setup
+    pressures : list
+      Specify a list of pressures (in kPa) to create
+    temperatures : list
+      List of temperatures (in K) to create
     ntasks : int
       Number of copies of *src* to make
     ncycles : int, optional
       Manually set the number of cycles per simulation.  Otherwise
       use existing amount / ntasks
-    pressures : list, optional
-      Specify a list of pressures (in kPa) to create 
     """
     src = src.strip('/')
 
     newdirs = []
 
-    mod_pressures = pressures is not None
-    if not mod_pressures:
-        pressures = [None]
+    for T, P, i in itertools.product(temperatures, pressures, range(ntasks)):
+        newname = '{}_{}_T{}_P{}_part{}'.format(src, fingerprint, T, P, i+1)
+        newdirs.append(newname)
+        # Copy over everything
+        shutil.copytree(src, newname)
 
-    for p in pressures:
-        for i in range(ntasks):
-            if mod_pressures:
-                newname = '{}_{}_P{}_part{}'.format(src, fingerprint, p, i+1)
-            else:
-                newname = '{}_{}_part{}'.format(src, fingerprint, i+1)
-            newdirs.append(newname)
-            # Copy over everything
-            shutil.copytree(src, newname)
+        # Find and modify the simulation.input file
+        modifications = {}
+        modifications['NumberOfInitializationCycles'] = zero_init
+        if ncycles is None:
+            modifications['NumberOfCycles'] = partial(
+                divide_cycles, factor=ntasks)
+        else:
+            modifications['NumberOfCycles'] = partial(
+                static_cycles, amount=ncycles)
 
-            # Find and modify the simulation.input file
-            modifications = {}
-            modifications['NumberOfInitializationCycles'] = zero_init
-            if ncycles is None:
-                modifications['NumberOfCycles'] = partial(divide_cycles, factor=ntasks)
-            else:
-                modifications['NumberOfCycles'] = partial(static_cycles, amount=ncycles)
-            if mod_pressures:
-                modifications['ExternalPressure'] = partial(static_pressure, amount=p)
+        modifications['ExternalPressure'] = partial(
+            static_pressure, amount=P)
+        modifications['ExternalTemperature'] = partial(
+            static_temperature, amount=T)
 
-            modify_raspa_input(newname, modifications)
+        modify_raspa_input(newname, modifications)
 
     make_qsubber_script(src, newdirs)
 

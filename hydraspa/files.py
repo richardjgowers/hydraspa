@@ -70,7 +70,7 @@ UseChargesFromCIFFile         yes
 
 Framework 0
 FrameworkName %%STRUCTURENAME%%
-UnitCells 1 1 1
+UnitCells %%NCELLS%%
 HeliumVoidFraction 0.78
 ExternalTemperature %%TEMPERATURE%%
 ExternalPressure    %%PRESSURE%%

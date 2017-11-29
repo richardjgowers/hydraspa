@@ -40,17 +40,14 @@ if __name__ == '__main__':
         temperatures = [conv_to_number(v, float)
                         for v in args['-T'].split(',')]
 
-        if args['-n']:
-            cycles = conv_to_number(args['-c'], int)
-        else:
-            cycles = None
+        ncycles = conv_to_number(args['-c'], int)
 
         fingerprint = hrsp.passport.create_passport(args['<dirname>'])
         hrsp.split(
             src=args['<dirname>'],
             fingerprint=fingerprint,
             ntasks=int(args['-n']),
-            ncycles=cycles,
+            ncycles=ncycles,
             pressures=pressures,
             temperatures=temperatures,
         )

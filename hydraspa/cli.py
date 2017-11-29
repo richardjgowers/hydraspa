@@ -7,7 +7,7 @@ Quantities such as cycles and pressures can be defined using 'k' and
 Usage:
   hydraspa list (structures | gases | forcefields)
   hydraspa create -s <struc> -g <gas> -f <ff> -o <outdir>
-  hydraspa split <dirname> -P <P> -T <T> [-n <N> -c <C>]
+  hydraspa split <dirname> -P <P> -T <T> -c <C> [-n <N>]
   hydraspa check <dirname>
   hydraspa gather <dirname>
   hydraspa --version
@@ -25,8 +25,8 @@ Options:
                       eg "-P 10k,20.5k,30k"
   -T TEMPERATURES     Comma separated temperatures.
                       eg "-T 208.0,214.0"
-  -n NTASKS           Number of duplicates per pressure point [default: 1]
   -c NCYCLES          Number of cycles to perform *each* sim for. Can use
                       k/M suffixes, eg "-c 2.5M"
+  -n NTASKS           Number of duplicates per pressure point [default: 1]
 
 """

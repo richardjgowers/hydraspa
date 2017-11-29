@@ -28,7 +28,7 @@ if __name__ == '__main__':
             for k in sorted(hrsp.files.forcefields):
                 print(k)
     elif args['create']:
-        hrsp.create(
+        hrsp.cli_create(
             structure=args['-s'],
             gas=args['-g'],
             forcefield=args['-f'],

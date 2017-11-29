@@ -53,35 +53,40 @@ def calc_ncells_required(struc, rcut):
     return nx, ny, nz
 
 
-def create(structure, gas, forcefield, outdir):
+def create(structure, gas, forcefield):
     """Create a simulation template
 
     Parameters
     ----------
     structure, gas, forcefield : str
       must correspond to an existing file
-    outdir : str
-      where to put the template
+
+    Returns
+    -------
+    files : dict
+      mapping of filename: content
     """
     struc_file = files.structures[structure.upper()]
     gas_files = files.gases[gas.upper()]
     ff_file = files.forcefields[forcefield.upper()]
 
+    outfiles = dict()
+
     # calculate cellsize
     cellsize = calc_ncells_required(struc_file, 11.0)
 
-    os.makedirs(outdir)
     # structure files
-    shutil.copy(struc_file,
-                os.path.join(outdir, _filename(struc_file)))
-    shutil.copy(gas_files[0],
-                os.path.join(outdir, _filename(gas_files[0])))
-    shutil.copy(gas_files[1],
-                os.path.join(outdir, 'pseudo_atoms.def'))
-    shutil.copy(ff_file,
-                os.path.join(outdir, 'force_field_mixing_rules.def'))
-    with open(os.path.join(outdir, 'framework.def'), 'w') as out:
-        out.write(files.FRAMEWORK)
+    with open(struc_file, 'r') as inf:
+        outfiles[_filename(struc_file)] = inf.read()
+    with open(gas_files[0], 'r') as inf:
+        outfiles[_filename(gas_files[0])] = inf.read()
+    with open(gas_files[1], 'r') as inf:
+        outfiles['pseudo_atoms.def'] = inf.read()
+    with open(ff_file, 'r') as inf:
+        outfiles['force_field_mixing_rules.def'] = inf.read()
+
+    outfiles['framework.def'] = files.FRAMEWORK
+
     input_template = files.INPUT_TEMPLATE.replace('%%FFNAME%%', forcefield)
     input_template = input_template.replace(
         '%%STRUCTURENAME%%',
@@ -89,5 +94,15 @@ def create(structure, gas, forcefield, outdir):
     input_template = input_template.replace('%%GASNAME%%', gas)
     input_template = input_template.replace('%%NCELLS%%',
                                             ' '.join(str(n) for n in cellsize))
-    with open(os.path.join(outdir, 'simulation.input'), 'w') as out:
-        out.write(input_template)
+    outfiles['simulation.input'] = input_template
+
+    return outfiles
+
+
+def cli_create(structure, gas, forcefield, outdir):
+    outfiles = create(structure, gas, forcefield)
+
+    os.makedirs(outdir)
+    for k, v in outfiles.items():
+         with open(os.path.join(outdir, k), 'w') as out:
+             out.write(v)

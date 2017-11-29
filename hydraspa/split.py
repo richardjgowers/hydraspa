@@ -26,15 +26,7 @@ def zero_init(line):
     return 'NumberOfInitializationCycles 0\n'
 
 
-def divide_cycles(line, factor):
-    ncycles = line.split()[1]
-
-    newcycles = 1 + (int(ncycles) // factor)
-
-    return line.replace(ncycles, str(newcycles))
-
-
-def split(src, fingerprint, temperatures, pressures, ntasks, ncycles=None):
+def split(src, fingerprint, temperatures, pressures, ntasks, ncycles):
     """Split simulation in src into various conditions
 
     Parameters
@@ -49,9 +41,8 @@ def split(src, fingerprint, temperatures, pressures, ntasks, ncycles=None):
       Specify a list of pressures (in kPa) to create
     ntasks : int
       Number of copies of *src* to make
-    ncycles : int, optional
-      Manually set the number of cycles per simulation.  Otherwise
-      use existing amount / ntasks
+    ncycles : int
+      Manually set the number of cycles per simulation.
     """
     src = src.strip('/')
 
@@ -64,46 +55,41 @@ def split(src, fingerprint, temperatures, pressures, ntasks, ncycles=None):
         shutil.copytree(src, newname)
 
         # Find and modify the simulation.input file
-        modifications = {}
-        modifications['NumberOfInitializationCycles'] = zero_init
-        if ncycles is None:
-            modifications['NumberOfCycles'] = partial(
-                divide_cycles, factor=ntasks)
-        else:
-            modifications['NumberOfCycles'] = partial(
-                static_cycles, amount=ncycles)
-
-        modifications['ExternalPressure'] = partial(
-            static_pressure, amount=P)
-        modifications['ExternalTemperature'] = partial(
-            static_temperature, amount=T)
-
-        modify_raspa_input(newname, modifications)
+        modify_raspa_input(newname, T, P, ncycles)
 
     make_qsubber_script(src, newdirs)
 
 
-def modify_raspa_input(src, mods):
-    """Modify the simulation.input file in *src* according to *mods*
+def modify_raspa_input(src, T, P, n):
+    """Modify the simulation.input file in src
 
     Parameters
     ----------
     src : string
       Raspa sim directory
-    mods : dict
-      Maps keywords to a function applied to the entire line, which
-      returns a replacement line
+    T : float
+      temperature
+    P : float
+      pressure
+    n : int
+      ncycles
     """
     simfile = os.path.join(src, 'simulation.input')
     # Create backup of old input file, why not..
     os.rename(simfile, simfile + '.bak')
 
+    modifications = {}
+    modifications['NumberOfInitializationCycles'] = zero_init
+    modifications['NumberOfCycles'] = partial(static_cycles, amount=n)
+    modifications['ExternalPressure'] = partial(static_pressure, amount=P)
+    modifications['ExternalTemperature'] = partial(static_temperature, amount=T)
+
     with open(simfile, 'w') as newfile, open(simfile + '.bak', 'r') as oldfile:
         for line in oldfile:
             if line.strip():
                 kw = line.split()[0]
-                if kw in mods:
-                    line = mods[kw](line)
+                if kw in modifications:
+                    line = modifications[kw](line)
             newfile.write(line)
 
 

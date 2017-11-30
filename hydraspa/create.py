@@ -100,9 +100,20 @@ def create(structure, gas, forcefield):
 
 
 def cli_create(structure, gas, forcefield, outdir):
+    """Create and write simulation template
+
+    Parameters
+    ----------
+    structure, gas, forcefield : str
+      name of components from database
+    outdir : str
+      path to create the template
+    """
     outfiles = create(structure, gas, forcefield)
 
     os.makedirs(outdir)
+    template_dir = os.path.join(outdir, 'template')
+    os.makedirs(template_dir)
     for k, v in outfiles.items():
-         with open(os.path.join(outdir, k), 'w') as out:
+         with open(os.path.join(template_dir, k), 'w') as out:
              out.write(v)

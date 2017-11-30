@@ -16,10 +16,18 @@ def runlength(d):
             if 'NumberOfCycles' in line:
                 return int(line.split()[1])
 
+
 def pressure(d):
     with open(os.path.join(d, 'simulation.input'), 'r') as f:
         for line in f:
             if 'ExternalPressure' in line:
+                return float(line.split()[1])
+
+
+def temperature(d):
+    with open(os.path.join(d, 'simulation.input'), 'r') as f:
+        for line in f:
+            if 'ExternalTmperature' in line:
                 return float(line.split()[1])
 
 def call(command):
@@ -97,34 +105,31 @@ class TestDocopt(object):
         assert args['--pressures']
         assert args['<P>'] == pressures.split()
 
-    @pytest.mark.parametrize('cyclestyle', ['-c', '--ncycles'])
+    @pytest.mark.parametrize('cyclestyle', ['-c'])
     @pytest.mark.parametrize('ncycles', ['100', '250'])
     def test_ncycles(self, cyclestyle, ncycles):
-        cmdstr = 'split this -n 2 {} {} -P 10 20'.format(cyclestyle, ncycles)
+        cmdstr = 'split this -n 2 {} {} -P 10,20 -T 200,300'.format(
+            cyclestyle, ncycles)
 
         args = docopt(doc, cmdstr.split())
 
-        assert args['--ncycles'] == ncycles
+        assert args['-c'] == ncycles
 
-    @pytest.mark.parametrize('tasks', ['', '-n 2', '--ntasks 2'])
-    @pytest.mark.parametrize('cycles', ['', '-c 1234', '--ncycles 1234'])
-    @pytest.mark.parametrize('pressures', ['', '-P 10 20', '--pressures 10 20'])
-    @pytest.mark.parametrize('order', itertools.permutations(range(3), 3))
-    def test_reordering(self, tasks, cycles, pressures, order):
-        opts = [tasks, cycles, pressures]
+    @pytest.mark.parametrize('tasks', ['', '-n 2'])
+    @pytest.mark.parametrize('cycles', ['-c 1234'])
+    @pytest.mark.parametrize('pressures', ['-P 10,20'])
+    @pytest.mark.parametrize('temperatures', ['-T 200'])
+    @pytest.mark.parametrize('order', itertools.permutations(range(4), 4))
+    def test_reordering(self, tasks, cycles, pressures, temperatures, order):
+        opts = [tasks, cycles, pressures, temperatures]
 
         cmdstr = 'split this ' + ' '.join(opts[i] for i in order)
         args = docopt(doc, cmdstr.split())
 
         if tasks:
-            assert args['--ntasks'] == '2'
+            assert args['-n'] == '2'
         else:
-            assert args['--ntasks'] == '1'
-        if cycles:
-            assert args['--ncycles'] == '1234'
-        else:
-            assert not args['--ncycles']
-        if pressures:
-            assert args['<P>'] == ['10', '20']
-        else:
-            assert not args['--pressures']
+            assert args['-n'] == '1'
+        assert args['-c'] == '1234'
+        assert args['-P'] == '10,20'
+        assert args['-T'] == '200'

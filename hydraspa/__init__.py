@@ -8,4 +8,5 @@ from . import passport
 from .split import split
 from . import gather
 from .check import check
+from . import poreblazer
 from .create import create, cli_create

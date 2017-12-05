@@ -3,6 +3,7 @@ import os
 import shutil
 
 from . import files
+from . import poreblazer
 
 
 def _filename(fn):
@@ -25,30 +26,11 @@ def calc_ncells_required(struc, rcut):
       number of replicas
     """
     # read cell size and angles of structure
-    lengths = {}
-    angles = {}
+    dims = poreblazer.grab_dims_from(struc)
 
-    with open(struc, 'r') as inf:
-        for line in inf:
-            if line.startswith('_cell_length_a'):
-                lengths['a'] = float(line.split()[1])
-            elif line.startswith('_cell_length_b'):
-                lengths['b'] = float(line.split()[1])
-            elif line.startswith('_cell_length_c'):
-                lengths['c'] = float(line.split()[1])
-            elif line.startswith('_cell_angle_alpha'):
-                angles['alpha'] = np.deg2rad(float(line.split()[1]))
-            elif line.startswith('_cell_angle_beta'):
-                angles['beta'] = np.deg2rad(float(line.split()[1]))
-            elif line.startswith('_cell_angle_gamma'):
-                angles['gamma'] = np.deg2rad(float(line.split()[1]))
-
-            if (len(lengths) + len(angles)) == 6:
-                break
-
-    nx = int(np.ceil(2 * rcut / (np.sin(angles['alpha']) * lengths['a'])))
-    ny = int(np.ceil(2 * rcut / (np.sin(angles['beta']) * lengths['b'])))
-    nz = int(np.ceil(2 * rcut / (np.sin(angles['gamma']) * lengths['c'])))
+    nx = int(np.ceil(2 * rcut / (np.sin(dims['alpha']) * dims['lx'])))
+    ny = int(np.ceil(2 * rcut / (np.sin(dims['beta']) * dims['ly'])))
+    nz = int(np.ceil(2 * rcut / (np.sin(dims['gamma']) * dims['lz'])))
 
     return nx, ny, nz
 
@@ -73,7 +55,7 @@ def create(structure, gas, forcefield):
     outfiles = dict()
 
     # calculate cellsize
-    cellsize = calc_ncells_required(struc_file, 11.0)
+    cellsize = calc_ncells_required(structure.upper(), 11.0)
 
     # structure files
     with open(struc_file, 'r') as inf:

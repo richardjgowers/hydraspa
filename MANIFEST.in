@@ -1,3 +1,5 @@
 include hydraspa/structures/*.cif
 include hydraspa/forcefields/*.def
 include hydraspa/gases/*.def
+include hydraspa/pb_files/UFF.atoms
+include hydraspa/pb_files/defaults.dat

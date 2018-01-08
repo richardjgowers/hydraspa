@@ -26,7 +26,8 @@ def calc_ncells_required(struc, rcut):
       number of replicas
     """
     # read cell size and angles of structure
-    dims = poreblazer.grab_dims_from(struc)
+    with open(files.structures[struc], 'r') as inf:
+        dims = poreblazer.grab_dims_from(inf)
 
     nx = int(np.ceil(2 * rcut / (np.sin(dims['alpha']) * dims['lx'])))
     ny = int(np.ceil(2 * rcut / (np.sin(dims['beta']) * dims['ly'])))

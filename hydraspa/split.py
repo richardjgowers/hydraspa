@@ -49,7 +49,7 @@ def split(src, fingerprint, temperatures, pressures, ntasks, ncycles):
     newdirs = []
 
     for T, P, i in itertools.product(temperatures, pressures, range(ntasks)):
-        newname = '{}_{}_T{}_P{}_part{}'.format(src, fingerprint, T, P, i+1)
+        newname = '{}_T{}_P{}_part{}'.format(fingerprint, T, P, i+1)
         newdirs.append(newname)
         # Copy over everything
         shutil.copytree(src, newname)

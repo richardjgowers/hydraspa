@@ -33,7 +33,7 @@ def create_passport(simdir):
     # calculate hash of the tar
     sha1 = hash(tfile)
     # rename the tar to include hash
-    os.rename(tfile, tfile[:-7] + '_{}.tar.gz'.format(sha1))
+    os.rename(tfile, '{}.tar.gz'.format(sha1))
     # return hash
     return sha1
 

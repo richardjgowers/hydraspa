@@ -4,8 +4,12 @@ Quantities such as cycles and pressures can be defined using 'k' and
 'M' suffixes, for example '4.2k' will be interpreted as '4200', and
 '1M' as 1000000.
 
+ - "create" makes a GCMC input
+ - "poreblazer" makes a poreblazer input
+
 Usage:
   hydraspa list (structures | gases | forcefields)
+  hydraspa poreblazer -s <struc>
   hydraspa create -s <struc> -g <gas> -f <ff> -o <outdir>
   hydraspa split <dirname> -P <P> -T <T> -c <C> [-n <N>]
   hydraspa check <dirname>

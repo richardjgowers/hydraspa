@@ -16,7 +16,7 @@ loop_
  _symmetry_equiv_pos_as_xyz
   1  'x, y, z'
 loop_
- _atom_site_type_symbol
+ _atom_site_label
  _atom_site_fract_x
  _atom_site_fract_y
  _atom_site_fract_z

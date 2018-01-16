@@ -12,9 +12,8 @@ _chemical_formula_sum   'Cd7 H48 C64 N16 O26'
 _cell_volume   1810.86037579
 _cell_formula_units_Z   1
 loop_
- _symmetry_equiv_pos_site_id
  _symmetry_equiv_pos_as_xyz
-  1  'x, y, z'
+  'x, y, z'
 loop_
  _atom_site_label
  _atom_site_fract_x

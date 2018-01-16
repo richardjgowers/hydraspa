@@ -12,9 +12,8 @@ _chemical_formula_sum   'Co1 Mo6 H20 C24 N12 O9'
 _cell_volume   1043.60517623
 _cell_formula_units_Z   1
 loop_
- _symmetry_equiv_pos_site_id
  _symmetry_equiv_pos_as_xyz
-  1  'x, y, z'
+  'x, y, z'
 loop_
  _atom_site_label
  _atom_site_fract_x

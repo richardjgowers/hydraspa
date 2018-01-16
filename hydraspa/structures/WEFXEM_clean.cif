@@ -12,9 +12,8 @@ _chemical_formula_sum   'Ni2 H36 C48 S4 N16 O12'
 _cell_volume   1968.85285126
 _cell_formula_units_Z   2
 loop_
- _symmetry_equiv_pos_site_id
  _symmetry_equiv_pos_as_xyz
-  1  'x, y, z'
+  'x, y, z'
 loop_
  _atom_site_label
  _atom_site_fract_x

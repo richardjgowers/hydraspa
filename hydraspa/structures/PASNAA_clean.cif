@@ -12,9 +12,8 @@ _chemical_formula_sum   'Co12 H32 C48 O52'
 _cell_volume   2460.32029116
 _cell_formula_units_Z   4
 loop_
- _symmetry_equiv_pos_site_id
  _symmetry_equiv_pos_as_xyz
-  1  'x, y, z'
+  'x, y, z'
 loop_
  _atom_site_label
  _atom_site_fract_x

@@ -12,9 +12,8 @@ _chemical_formula_sum   'Zn2 H24 C46 Br2 N6 O8'
 _cell_volume   3296.02761545
 _cell_formula_units_Z   2
 loop_
- _symmetry_equiv_pos_site_id
  _symmetry_equiv_pos_as_xyz
-  1  'x, y, z'
+  'x, y, z'
 loop_
  _atom_site_label
  _atom_site_fract_x

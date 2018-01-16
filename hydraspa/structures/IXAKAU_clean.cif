@@ -12,9 +12,8 @@ _chemical_formula_sum   'Cu8 H56 C104 N8 O32'
 _cell_volume   5185.92443684
 _cell_formula_units_Z   8
 loop_
- _symmetry_equiv_pos_site_id
  _symmetry_equiv_pos_as_xyz
-  1  'x, y, z'
+  'x, y, z'
 loop_
  _atom_site_label
  _atom_site_fract_x

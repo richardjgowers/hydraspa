@@ -12,9 +12,8 @@ _chemical_formula_sum   'Co3 H20 C28 O16'
 _cell_volume   1119.69029386
 _cell_formula_units_Z   1
 loop_
- _symmetry_equiv_pos_site_id
  _symmetry_equiv_pos_as_xyz
-  1  'x, y, z'
+  'x, y, z'
 loop_
  _atom_site_label
  _atom_site_fract_x

@@ -12,9 +12,8 @@ _chemical_formula_sum   'Li6 Co2 H42 C28 N16 O6'
 _cell_volume   1283.97658254
 _cell_formula_units_Z   2
 loop_
- _symmetry_equiv_pos_site_id
  _symmetry_equiv_pos_as_xyz
-  1  'x, y, z'
+  'x, y, z'
 loop_
  _atom_site_label
  _atom_site_fract_x

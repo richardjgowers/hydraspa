@@ -12,9 +12,8 @@ _chemical_formula_sum   'Sm6 P6 H90 C74 N6 O46'
 _cell_volume   2682.73550819
 _cell_formula_units_Z   2
 loop_
- _symmetry_equiv_pos_site_id
  _symmetry_equiv_pos_as_xyz
-  1  'x, y, z'
+  'x, y, z'
 loop_
  _atom_site_label
  _atom_site_fract_x

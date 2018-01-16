@@ -12,9 +12,8 @@ _chemical_formula_sum   'P4 H48 Pb2 C52 I4 O4'
 _cell_volume   1619.05861117
 _cell_formula_units_Z   2
 loop_
- _symmetry_equiv_pos_site_id
  _symmetry_equiv_pos_as_xyz
-  1  'x, y, z'
+  'x, y, z'
 loop_
  _atom_site_label
  _atom_site_fract_x

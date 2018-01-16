@@ -12,9 +12,8 @@ _chemical_formula_sum   'Zn4 H32 C60 S8 N4 O16'
 _cell_volume   2441.5769948
 _cell_formula_units_Z   4
 loop_
- _symmetry_equiv_pos_site_id
  _symmetry_equiv_pos_as_xyz
-  1  'x, y, z'
+  'x, y, z'
 loop_
  _atom_site_label
  _atom_site_fract_x

@@ -52,7 +52,7 @@ def create_input(structure_name):
     with open('input.dat', 'w') as out:
         out.write('{}\n'.format(xyzname))
         out.write('{} {} {}\n'.format(
-            dims['lx'], dims['ly'], dims['lz']))
+            dims['a'], dims['b'], dims['c']))
         out.write('{} {} {}\n'.format(
             dims['alpha'], dims['beta'], dims['gamma']))
 
@@ -77,7 +77,7 @@ def fractional_to_real(xyz, dims):
     xyz : np.ndarray
       real space representation of fractional positions
     """
-    box = np.array([dims['lx'], dims['ly'], dims['lz'],
+    box = np.array([dims['a'], dims['b'], dims['c'],
                     dims['alpha'], dims['beta'], dims['gamma']],
                    dtype=np.float32)
 
@@ -145,16 +145,16 @@ def grab_dims_from(struc):
     Returns
     -------
     dims : dict
-      dict with keys lx, ly, lz, alpha, beta, gamma
+      dict with keys a, b, c, alpha, beta, gamma
     """
     dims = dict()
     for line in struc:
         if line.lstrip().startswith('_cell_length_a'):
-            dims['lx'] = float(line.split()[1])
+            dims['a'] = float(line.split()[1])
         elif line.lstrip().startswith('_cell_length_b'):
-            dims['ly'] = float(line.split()[1])
+            dims['b'] = float(line.split()[1])
         elif line.lstrip().startswith('_cell_length_c'):
-            dims['lz'] = float(line.split()[1])
+            dims['c'] = float(line.split()[1])
         elif line.lstrip().startswith('_cell_angle_alpha'):
             dims['alpha'] = float(line.split()[1])
         elif line.lstrip().startswith('_cell_angle_beta'):

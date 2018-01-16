@@ -29,9 +29,21 @@ def calc_ncells_required(struc, rcut):
     with open(files.structures[struc], 'r') as inf:
         dims = poreblazer.grab_dims_from(inf)
 
-    nx = int(np.ceil(2 * rcut / (np.sin(dims['alpha']) * dims['lx'])))
-    ny = int(np.ceil(2 * rcut / (np.sin(dims['beta']) * dims['ly'])))
-    nz = int(np.ceil(2 * rcut / (np.sin(dims['gamma']) * dims['lz'])))
+    a, b, c = dims['a'], dims['b'], dims['c']
+    alpha, beta, gamma = map(np.deg2rad,
+                             [dims['alpha'], dims['beta'], dims['gamma']])
+    # calculate minimum effective cell length in each dimension
+    # this is the length we can increase by tiling in a given direction
+    lx = min(abs(a * np.sin(beta)),
+             abs(a * np.sin(gamma)))
+    ly = min(abs(b * np.sin(alpha)),
+             abs(b * np.sin(gamma)))
+    lz = min(abs(c * np.sin(beta)),
+             abs(c * np.sin(alpha)))
+
+    nx = int(np.ceil(2 * rcut / lx))
+    ny = int(np.ceil(2 * rcut / ly))
+    nz = int(np.ceil(2 * rcut / lz))
 
     return nx, ny, nz
 

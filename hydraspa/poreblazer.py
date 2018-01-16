@@ -63,6 +63,20 @@ def create_input(structure_name):
 
 
 def fractional_to_real(xyz, dims):
+    """Convert fractional positions to real positions
+
+    Parameters
+    ----------
+    xyz : np.ndarray
+      fractional positions
+    dims : dict
+      dict of box information
+
+    Returns
+    -------
+    xyz : np.ndarray
+      real space representation of fractional positions
+    """
     box = np.array([dims['lx'], dims['ly'], dims['lz'],
                     dims['alpha'], dims['beta'], dims['gamma']],
                    dtype=np.float32)
@@ -73,6 +87,17 @@ def fractional_to_real(xyz, dims):
 
 
 def write_xyz_file(name, names, positions):
+    """Create an xyz file
+
+    Parameters
+    ----------
+    name : str
+      output file name
+    names : list
+      atom names
+    positions : np.ndarray
+      positions of atoms
+    """
     with open(name, 'w') as out:
         out.write('{}\n\n'.format(len(positions)))
         for nm, (x, y, z) in zip(names, positions):
@@ -80,7 +105,17 @@ def write_xyz_file(name, names, positions):
 
 
 def grab_xyz_from(struc):
-    """Returns fractional coordinates"""
+    """Extract names and fractional coordinates from CIF data
+
+    Parameters
+    ----------
+    struc : list of lines
+      the read cif file
+
+    Returns
+    -------
+    names, positions : list, np.ndarray
+    """
     read_positions = False
     names = []
     xyz = []
@@ -100,6 +135,18 @@ def grab_xyz_from(struc):
 
 
 def grab_dims_from(struc):
+    """Extract box information from CIF data
+
+    Parameters
+    ----------
+    struc : list of lines
+      the read cif file
+
+    Returns
+    -------
+    dims : dict
+      dict with keys lx, ly, lz, alpha, beta, gamma
+    """
     dims = dict()
     for line in struc:
         if line.lstrip().startswith('_cell_length_a'):

@@ -51,20 +51,20 @@ INPUT_TEMPLATE = """\
 SimulationType                MonteCarlo
 NumberOfCycles                100000
 NumberOfInitializationCycles  0
-PrintEvery                    1000
-PrintPropertiesEvery          1000
+PrintEvery                    100
+PrintPropertiesEvery          100
 RestartFile                   no
 
 # Restart and crash-recovery
 # Write a binary file (binary restart.dat).
 ContinueAfterCrash              no
 # The output frequency of the crash-recovery file.
-WriteBinaryRestartFileEvery     5000
+WriteBinaryRestartFileEvery     0
 
 Forcefield                    %%FFNAME%%
-CutOffVDW                     11.0
+CutOffVDW                     12.8
 ChargeMethod                  Ewald
-CutOffChargeCharge            11.0
+CutOffChargeCharge            12.8
 EwaldPrecision                1e-6
 UseChargesFromCIFFile         yes
 
@@ -75,7 +75,7 @@ HeliumVoidFraction 0.78
 ExternalTemperature %%TEMPERATURE%%
 ExternalPressure    %%PRESSURE%%
 Movies no
-WriteMoviesEvery    10000  # 100 000 steps
+WriteMoviesEvery    0
 
 # Grids
 NumberOfGrids 0

@@ -1,9 +1,9 @@
 # general rule for shifted vs truncated
-truncated
+shifted
 # general rule for tail corrections
 no
 # number of defined interactions
-102
+103
 # atom type, interaction form, epsilon, sigma
 B_ lennard-jones 90.57954606191198 3.6375394661670053
 C_ lennard-jones 52.83806853611532 3.4308509635584468
@@ -12,6 +12,7 @@ H_ lennard-jones 22.14166681513404 2.5711337005530193
 I_ lennard-jones 170.59147841660086 4.009044231631527
 K_ lennard-jones 17.61268951203844 3.396105913550973
 N_ lennard-jones 34.722159323732924 3.260689308393642
+N_com none
 O_ lennard-jones 30.193182020637327 3.1181455134911875
 P_ lennard-jones 153.4820086049064 3.694556984127987
 S_ lennard-jones 137.88219789424375 3.594776327696269
@@ -108,4 +109,4 @@ Yb_ lennard-jones 114.73409167842183 2.9889651993608384
 Zn_ lennard-jones 62.399242842650466 2.4615531582217574
 Zr_ lennard-jones 34.722159323732924 2.78316759547042
 # mixing rule
-Jorgensen
+Lorentz-Berthelot

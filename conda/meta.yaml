@@ -1,6 +1,8 @@
+{% set data = load_setup_py_data() %}
+
 package:
   name: hydraspa
-  version: 0.0.5
+  version: {{ data.get('version') }}
 
 source:
   path: ../
@@ -22,3 +24,5 @@ requirements:
 test:
   imports:
     - hydraspa
+  commands:
+    - hydraspa -h

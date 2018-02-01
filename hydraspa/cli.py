@@ -10,7 +10,7 @@ Quantities such as cycles and pressures can be defined using 'k' and
 Usage:
   hydraspa list (structures | gases | forcefields)
   hydraspa poreblazer -s <struc>
-  hydraspa create -s <struc> -g <gas> -f <ff> -o <outdir>
+  hydraspa create (-s <struc> | -l <file>) -g <gas> -f <ff> -o <outdir>
   hydraspa split <dirname> -P <P> -T <T> -c <C> [-n <N>]
   hydraspa check <dirname>
   hydraspa gather <dirname>
@@ -19,8 +19,9 @@ Usage:
 Options:
   -h --help           Help!
   --version           Show the version
-  -s STRUCTURE        Name of structure to use.  Must match one available
-                      in `list structures`
+  -s STRUCTURE        Name of structure from database to use.  Must match one
+                      available in `list structures`
+  -l STRUCTURE_FILE   Path to structure file to use.
   -g GAS              Name of gas to use.  Must match one in `list gases`
   -f FORCEFIELD       Name of forcefield.
   -o OUTDIR           Where to place output files for create

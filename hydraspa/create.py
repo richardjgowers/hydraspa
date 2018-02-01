@@ -16,7 +16,7 @@ def calc_ncells_required(struc, rcut):
     Parameters
     ----------
     struc : str
-      name of structure
+      path to structure
     rcut : float
       cutoff range of forcefield
 
@@ -26,7 +26,7 @@ def calc_ncells_required(struc, rcut):
       number of replicas
     """
     # read cell size and angles of structure
-    with open(files.structures[struc], 'r') as inf:
+    with open(struc, 'r') as inf:
         dims = poreblazer.grab_dims_from(inf)
 
     a, b, c = dims['a'], dims['b'], dims['c']
@@ -53,7 +53,9 @@ def create(structure, gas, forcefield):
 
     Parameters
     ----------
-    structure, gas, forcefield : str
+    structure : str
+      must be either absolute path to file or name in database
+    gas, forcefield : str
       must correspond to an existing file
 
     Returns
@@ -61,14 +63,19 @@ def create(structure, gas, forcefield):
     files : dict
       mapping of filename: content
     """
-    struc_file = files.structures[structure.upper()]
+    if structure.startswith(os.path.sep):
+        if not os.path.exists(structure):
+            ValueError("Local structure does not exist")
+        struc_file = structure
+    else:
+        struc_file = files.structures[structure.upper()]
     gas_files = files.gases[gas.upper()]
     ff_file = files.forcefields[forcefield.upper()]
 
     outfiles = dict()
 
     # calculate cellsize
-    cellsize = calc_ncells_required(structure.upper(), 11.0)
+    cellsize = calc_ncells_required(struc_file, 12.8)
 
     # structure files
     with open(struc_file, 'r') as inf:
@@ -99,7 +106,9 @@ def cli_create(structure, gas, forcefield, outdir):
 
     Parameters
     ----------
-    structure, gas, forcefield : str
+    structure : str
+      either absolute path to structure or name of structure in database
+    gas, forcefield : str
       name of components from database
     outdir : str
       path to create the template

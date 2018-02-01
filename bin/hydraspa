@@ -2,6 +2,7 @@
 from __future__ import print_function
 
 from docopt import docopt
+import os
 
 import hydraspa as hrsp
 from hydraspa.util import conv_to_number
@@ -32,8 +33,13 @@ if __name__ == '__main__':
             args['-s'],
         )
     elif args['create']:
+        if args['-l']:
+            struc = os.path.abspath(args['-l'])
+        else:
+            struc = args['-s']
+
         hrsp.cli_create(
-            structure=args['-s'],
+            structure=struc,
             gas=args['-g'],
             forcefield=args['-f'],
             outdir=args['-o'],

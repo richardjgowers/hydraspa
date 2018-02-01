@@ -40,6 +40,9 @@ gases = {
 forcefields = {
     'UFF': _rf(os.path.join('forcefields', 'uff.def'))
 }
+ff_cutoffs = {
+    'UFF': 12.8,
+}
 
 
 FRAMEWORK = """\
@@ -62,9 +65,9 @@ ContinueAfterCrash              no
 WriteBinaryRestartFileEvery     0
 
 Forcefield                    %%FFNAME%%
-CutOffVDW                     12.8
+CutOffVDW                     %%CUTOFF%%
 ChargeMethod                  Ewald
-CutOffChargeCharge            12.8
+CutOffChargeCharge            %%CUTOFF%%
 EwaldPrecision                1e-6
 UseChargesFromCIFFile         yes
 

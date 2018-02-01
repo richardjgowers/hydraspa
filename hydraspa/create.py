@@ -71,11 +71,12 @@ def create(structure, gas, forcefield):
         struc_file = files.structures[structure.upper()]
     gas_files = files.gases[gas.upper()]
     ff_file = files.forcefields[forcefield.upper()]
+    rcut = files.ff_cutoffs[forcefield.upper()]
 
     outfiles = dict()
 
     # calculate cellsize
-    cellsize = calc_ncells_required(struc_file, 12.8)
+    cellsize = calc_ncells_required(struc_file, rcut)
 
     # structure files
     with open(struc_file, 'r') as inf:
@@ -96,6 +97,7 @@ def create(structure, gas, forcefield):
     input_template = input_template.replace('%%GASNAME%%', gas)
     input_template = input_template.replace('%%NCELLS%%',
                                             ' '.join(str(n) for n in cellsize))
+    input_template = input_template.replace('%%CUTOFF%%', '{}'.format(rcut))
     outfiles['simulation.input'] = input_template
 
     return outfiles

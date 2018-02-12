@@ -69,7 +69,8 @@ def create(structure, gas, forcefield):
         struc_file = structure
     else:
         struc_file = files.structures[structure.upper()]
-    gas_files = files.gases[gas.upper()]
+
+    gas_data = files.gases[gas.upper()]
     ff_file = files.forcefields[forcefield.upper()]
     rcut = files.ff_cutoffs[forcefield.upper()]
 
@@ -81,9 +82,9 @@ def create(structure, gas, forcefield):
     # structure files
     with open(struc_file, 'r') as inf:
         outfiles[_filename(struc_file)] = inf.read()
-    with open(gas_files[0], 'r') as inf:
+    with open(gas_data.def_file, 'r') as inf:
         outfiles[_filename(gas_files[0])] = inf.read()
-    with open(gas_files[1], 'r') as inf:
+    with open(gas_data.pseudo_file, 'r') as inf:
         outfiles['pseudo_atoms.def'] = inf.read()
     with open(ff_file, 'r') as inf:
         outfiles['force_field_mixing_rules.def'] = inf.read()
@@ -94,7 +95,7 @@ def create(structure, gas, forcefield):
     input_template = input_template.replace(
         '%%STRUCTURENAME%%',
         os.path.splitext(_filename(struc_file))[0])
-    input_template = input_template.replace('%%GASNAME%%', gas)
+    input_template = input_template.replace('%%GASMOVES%%', gas_data.moves)
     input_template = input_template.replace('%%NCELLS%%',
                                             ' '.join(str(n) for n in cellsize))
     input_template = input_template.replace('%%CUTOFF%%', '{}'.format(rcut))

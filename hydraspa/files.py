@@ -28,14 +28,35 @@ structures = {
 }
 
 
-def _gas_rf(name):
-    return (_rf(os.path.join('gases', name + '.def')),
-            _rf(os.path.join('gases', 'pseudo_' + name + '.def')))
+SINGLE_SITE_MOVES = """\
+Component 0 MoleculeName             {}
+            TranslationProbability   0.25
+            SwapProbability          0.75
+            CreateNumberOfMolecules  0
+"""
 
-gases = {
-    nm.upper(): _gas_rf(nm) for nm in ('Ar', 'CO2', 'N2', 'helium')
-}
+MULTI_SITE_MOVES = """\
+Component 0 MoleculeName             {}
+            TranslationProbability   0.25
+            RotationProbability      0.25
+            SwapProbability          0.50
+            CreateNumberOfMolecules  0
+"""
 
+GasSpecies = namedtuple('GasSpecies', ['def_file', 'pseudo_file', 'moves'])
+
+_SINGLE_SITE = ['Ar',' helium']
+_MULTI_SITE = ['CO2', 'N2']
+
+gases = dict()
+for nm in _SINGLE_SITE + _MULTI_SITE:
+    MOVES = SINGLE_SITE_MOVES if nm in _SINGLE_SITE else MULTI_SITE_MOVES
+
+    gases[nm.upper()] = GasSpecies(
+        def_file=_rf(os.path.join('gases', name + '.def')),
+        pseudo_file=_rf(os.path.join('gases', 'pseudo_' + name + '.def')),
+        moves=MOVES.format(nm)
+    )
 
 forcefields = {
     'UFF': _rf(os.path.join('forcefields', 'uff.def'))
@@ -83,8 +104,8 @@ WriteMoviesEvery    0
 # Grids
 NumberOfGrids 0
 
-Component 0 MoleculeName             %%GASNAME%%
-            TranslationProbability   0.25
-            SwapProbability          0.75
-            CreateNumberOfMolecules  0
+# Gas molecule MC moves section
+%%GASMOVES%%
+
+
 """

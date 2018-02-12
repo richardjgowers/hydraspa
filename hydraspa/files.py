@@ -2,6 +2,7 @@
 
 """
 
+from collections import namedtuple
 from functools import partial
 import glob
 from pkg_resources import resource_filename, resource_listdir
@@ -53,8 +54,8 @@ for nm in _SINGLE_SITE + _MULTI_SITE:
     MOVES = SINGLE_SITE_MOVES if nm in _SINGLE_SITE else MULTI_SITE_MOVES
 
     gases[nm.upper()] = GasSpecies(
-        def_file=_rf(os.path.join('gases', name + '.def')),
-        pseudo_file=_rf(os.path.join('gases', 'pseudo_' + name + '.def')),
+        def_file=_rf(os.path.join('gases', nm + '.def')),
+        pseudo_file=_rf(os.path.join('gases', 'pseudo_' + nm + '.def')),
         moves=MOVES.format(nm)
     )
 

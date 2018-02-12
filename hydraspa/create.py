@@ -83,7 +83,7 @@ def create(structure, gas, forcefield):
     with open(struc_file, 'r') as inf:
         outfiles[_filename(struc_file)] = inf.read()
     with open(gas_data.def_file, 'r') as inf:
-        outfiles[_filename(gas_files[0])] = inf.read()
+        outfiles[_filename(gas_data.def_file)] = inf.read()
     with open(gas_data.pseudo_file, 'r') as inf:
         outfiles['pseudo_atoms.def'] = inf.read()
     with open(ff_file, 'r') as inf:

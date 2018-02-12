@@ -46,7 +46,7 @@ Component 0 MoleculeName             {}
 
 GasSpecies = namedtuple('GasSpecies', ['def_file', 'pseudo_file', 'moves'])
 
-_SINGLE_SITE = ['Ar',' helium']
+_SINGLE_SITE = ['Ar', 'helium']
 _MULTI_SITE = ['CO2', 'N2']
 
 gases = dict()

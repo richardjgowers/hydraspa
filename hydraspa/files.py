@@ -59,11 +59,12 @@ for nm in _SINGLE_SITE + _MULTI_SITE:
         moves=MOVES.format(nm)
     )
 
+Forcefield = namedtuple('Forcefield', ['def_file', 'cutoff'])
 forcefields = {
-    'UFF': _rf(os.path.join('forcefields', 'uff.def'))
-}
-ff_cutoffs = {
-    'UFF': 12.8,
+    'UFF': Forcefield(
+        def_file=_rf(os.path.join('forcefields', 'uff.def')),
+        cutoff=12.8
+    )
 }
 
 

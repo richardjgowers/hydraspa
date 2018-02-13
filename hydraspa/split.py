@@ -46,6 +46,9 @@ def split(src, fingerprint, temperatures, pressures, ntasks, ncycles):
     """
     src = src.strip('/')
 
+    if not os.path.exists(src):
+        raise ValueError("Template not found")
+
     newdirs = []
 
     for T, P, i in itertools.product(temperatures, pressures, range(ntasks)):

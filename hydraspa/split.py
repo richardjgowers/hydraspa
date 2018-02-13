@@ -57,8 +57,6 @@ def split(src, fingerprint, temperatures, pressures, ntasks, ncycles):
         # Find and modify the simulation.input file
         modify_raspa_input(newname, T, P, ncycles)
 
-    make_qsubber_script(src, newdirs)
-
 
 def modify_raspa_input(src, T, P, n):
     """Modify the simulation.input file in src

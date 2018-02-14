@@ -22,9 +22,9 @@ def is_finished(dirname):
         output = glob.glob(os.path.join(dirname, 'Output', 'System_0', '*.data'))[0]
     except IndexError:  # output not created, sim not started
         return 2
-    with open(output, 'r') as f:
+    with open(output, 'rb') as f:
         f.seek(-100, 2)  # seek to 100 bytes before EOF
-        done = 'Simulation finished' in f.read()
+        done = b'Simulation finished' in f.read()
     if done:
         return 0
     else:

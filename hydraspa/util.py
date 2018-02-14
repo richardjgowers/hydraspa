@@ -13,7 +13,7 @@ STATUSES = {
     2: 'NOT STARTED',
 }
 
-Result = namedtuple('Result', ['path', 'temperature', 'pressure', 'partnumber'])
+Result = namedtuple('Result', ['temperature', 'pressure', 'partnumber', 'path'])
 
 def is_finished(dirname):
     """Check if raspa simulation in *dirname* finished"""
@@ -83,7 +83,7 @@ def discover(root):
         if mat is not None:
             T, P, part = mat.groups()
             T, P, part = float(T), float(P), int(part)
-            children.append(Result(os.path.join(root, dirname), T, P, part))
+            children.append(Result(T, P, part, os.path.join(root, dirname)))
 
     return sorted(children,
                   key=lambda x: (x.temperature, x.pressure, x.partnumber))

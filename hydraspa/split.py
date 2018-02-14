@@ -42,21 +42,21 @@ def split(src, temperatures, pressures, ntasks, ncycles):
     ncycles : int
       Manually set the number of cycles per simulation.
     """
-    src = src.strip('/')
-
-    if not os.path.exists(src):
+    if not os.path.exists(os.path.join(src, 'template')):
         raise ValueError("Template not found")
 
-    newdirs = []
+    olddir = os.getcwd()
+    os.chdir(src)
+    try:
+        for T, P, i in itertools.product(temperatures, pressures, range(ntasks)):
+            newname = 'T{}_P{}_part{}'.format(T, P, i+1)
+            # Copy over everything
+            shutil.copytree('template', newname)
 
-    for T, P, i in itertools.product(temperatures, pressures, range(ntasks)):
-        newname = 'T{}_P{}_part{}'.format(T, P, i+1)
-        newdirs.append(newname)
-        # Copy over everything
-        shutil.copytree(src, newname)
-
-        # Find and modify the simulation.input file
-        modify_raspa_input(newname, T, P, ncycles)
+            # Find and modify the simulation.input file
+            modify_raspa_input(newname, T, P, ncycles)
+    finally:
+        os.chdir(olddir)
 
 
 def modify_raspa_input(src, T, P, n):

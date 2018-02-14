@@ -30,7 +30,6 @@ def chk_dirs(request, tmpdir):
 @pytest.fixture(scope='function')
 def newdir(tmpdir):
     shutil.copytree('mysim', tmpdir.join('mysim').strpath)
-    shutil.copy('premade_mysim.tar.gz', tmpdir.strpath)
     with indir(tmpdir.strpath):
         yield
 

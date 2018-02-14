@@ -1,17 +1,6 @@
-import contextlib
 import os
 import pytest
 import shutil
-
-
-@contextlib.contextmanager
-def indir(d):
-    olddir = os.getcwd()
-    os.chdir(d)
-    try:
-        yield
-    finally:
-        os.chdir(olddir)
 
 
 @pytest.fixture(params=['chk_1234567_part{}', 'chk_1234567_P1.2_part{}'])
@@ -22,7 +11,7 @@ def chk_dirs(request, tmpdir):
             'chk_1234567_part{}'.format(i),
             tmpdir.join(template.format(i)).strpath
         )
-    with indir(tmpdir.strpath):
+    with tmpdir.as_cwd():
         # give list of created dirs
         yield [template.format(i) for i in ('1', '2', '3')]
 
@@ -30,5 +19,5 @@ def chk_dirs(request, tmpdir):
 @pytest.fixture(scope='function')
 def newdir(tmpdir):
     shutil.copytree('mysim', tmpdir.join('mysim').strpath)
-    with indir(tmpdir.strpath):
+    with tmpdir.as_cwd():
         yield

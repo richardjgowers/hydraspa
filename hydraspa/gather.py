@@ -1,6 +1,8 @@
 import glob
 import os
 import numpy as np
+import re
+import pandas as pd
 
 from .util import discover, is_finished
 
@@ -23,28 +25,56 @@ def gather(dirname):
     for child in children:
         if is_finished(child.path) == 2:  # skip unfinished directories
             continue
-        output[child.path] = parse_output(child.path)
+        output[child.path] = parse_results(child.path)
 
     return output
 
 
-def parse_output(dirname):
-    """Returns np array of instantaneous mol/uc values"""
-    def _getval1(l):
-        # production cycles
-        return float(l.split('adsorption:')[1].split('(avg.')[0])
-    def _getval2(l):
-        # init cycles
-        return float(l.split('adsorption:')[1].split('[mol')[0])
+# Regex patterns to grab stuff from Raspa output
+# grabs the integer values before and after 'out of'
+# eg '20 out of 200' -> (20, 200)
+CYCLE_PAT = re.compile(r'^[C].+?(\d+)(?: out of )(\d+)')
+# matches the instantaneous mol/kg on this line:              vvvvvvvvvvvv
+# absolute adsorption:   0.00000 (avg.   0.00000) [mol/uc],   0.0000000000 (avg.   0.0000000000) [mol/kg],   0.0000000000 (avg.   0.0000000000) [mg/g]
+MMOL_PAT = re.compile(r'(?:\s+absolute adsorption:).+?(\d+\.\d+)(?=\s+\(avg\.\s+\d+\.\d+\)\s+\[mol\/kg\])')
 
-    output = glob.glob(os.path.join(dirname, 'Output', 'System_0', '*.data'))[0]
+def parse_results(path):
+    """Parse results from a Raspa simulation, returns absolute mol/kg
 
-    vals = []
-    with open(output, 'r') as f:
-        for line in f:
-            if line.lstrip(' \t').startswith('absolute adsorption'):
-                if 'avg.' in line:
-                    vals.append(_getval1(line.lstrip()))
-                else:
-                    vals.append(_getval2(line.lstrip()))
-    return np.array(vals)
+    Ignores all values from [Init] period. Simulations shouldn't be using
+    this option anyway, as we're dealing with equilibration ourselves.
+
+    Parameters
+    ----------
+    path : str
+      path where the simulation took place
+
+    Returns
+    -------
+    results : pandas.Series
+      absolute loadings in mol/kg
+    """
+    # return pandas series of the results
+    outfile = glob.glob(os.path.join(path, 'Output/System_0/*.data'))[0]
+
+    cycles = []
+    values = []
+
+    with open(outfile, 'r') as inf:
+        for line in inf:
+            cmat = re.search(CYCLE_PAT, line)
+            if cmat:
+                cycles.append(cmat.groups()[0])
+                continue
+            lmat = re.search(MMOL_PAT, line)
+            if lmat:
+                values.append(lmat.groups()[0])
+
+    cycles = np.array(cycles, dtype=np.int)
+    values = np.array(values, dtype=np.float32)
+
+    df = pd.Series(values, index=cycles)
+    df.name = 'density'
+    df.index.name = 'time'
+
+    return df

@@ -90,13 +90,3 @@ def modify_raspa_input(src, T, P, n):
                 if kw in modifications:
                     line = modifications[kw](line)
             newfile.write(line)
-
-
-def make_qsubber_script(base, copies):
-    with open('qsub_{}.sh'.format(base), 'w') as out:
-        out.write("#!/bin/bash\n")
-        for d in copies:
-            out.write("\n")
-            out.write("cd {}\n".format(d))
-            out.write("qsub qsub.sh\n")
-            out.write("cd ../\n")

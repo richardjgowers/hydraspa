@@ -32,7 +32,3 @@ def newdir(tmpdir):
     shutil.copytree('mysim', tmpdir.join('mysim').strpath)
     with indir(tmpdir.strpath):
         yield
-
-@pytest.fixture
-def REFHASH():
-    return '4033d12'

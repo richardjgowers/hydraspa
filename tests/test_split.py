@@ -25,18 +25,6 @@ def pressure(d):
             if 'ExternalPressure' in line:
                 return float(line.split()[1])
 
-# what a qsubber script should look like
-REF_QSUB = """\
-#!/bin/bash
-
-cd mysim_1234567_part1
-qsub qsub.sh
-cd ../
-
-cd mysim_1234567_part2
-qsub qsub.sh
-cd ../
-"""
 
 @pytest.mark.usefixtures('newdir')
 class TestSplit(object):
@@ -87,17 +75,6 @@ class TestSplit(object):
 
         for d in glob.glob('mysim_1234567_part*'):
             assert eq_length(d) == 0
-
-    def test_check_qsubber_made(self):
-        hrsp.split('mysim', '1234567', ntasks=2)
-
-        assert os.path.exists('qsub_mysim.sh')
-
-    def test_check_qsubber_contents(self):
-        hrsp.split('mysim', '1234567', ntasks=2)
-
-        with open('qsub_mysim.sh', 'r') as f:
-            assert f.read() == REF_QSUB
 
     @pytest.mark.parametrize('ntasks', [1, 2])
     @pytest.mark.parametrize('p', [[5, 10, 20], [5.5, 10, 20]])

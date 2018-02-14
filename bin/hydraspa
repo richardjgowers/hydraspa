@@ -8,12 +8,6 @@ import hydraspa as hrsp
 from hydraspa.util import conv_to_number
 
 
-def do_gather(d):
-    out = hrsp.gather.gather(d)
-    for k, v in out.items():
-        print("{}: {}".format(k, v.mean()))
-
-
 if __name__ == '__main__':
     args = docopt(hrsp.cli.__doc__, version=hrsp.__version__)
 
@@ -62,4 +56,7 @@ if __name__ == '__main__':
     elif args['check']:
         hrsp.check(args['<dirname>'])
     elif args['gather']:
-        do_gather(args['<dirname>'])
+        results = hrsp.gather.gather(args['<dirname>'])
+
+        for res, value in sorted(results.items()):
+            print("{r.temperature} {r.pressure}: {v}".format(r=res, v=value))

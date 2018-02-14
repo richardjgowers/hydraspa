@@ -3,8 +3,19 @@ capsys - inbuilt pytest fixture that captures stdout
 """
 
 import pytest
+import shutil
 
 import hydraspa as hrsp
+
+
+@pytest.fixture
+def chk_dirs(tmpdir):
+    shutil.copytree('chk', tmpdir.join('chk').strpath)
+
+    with tmpdir.as_cwd():
+        yield ('chk/T100.0_P123.0_part1',
+               'chk/T100.0_P123.0_part2',
+               'chk/T100.0_P123.0_part3')
 
 
 class TestCheck(object):
@@ -37,4 +48,3 @@ class TestCheck(object):
         dirs = chk_dirs
 
         assert ' - {} is NOT STARTED'.format(dirs[1]) in out.split('\n')
-

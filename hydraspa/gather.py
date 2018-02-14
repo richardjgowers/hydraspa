@@ -25,7 +25,7 @@ def gather(dirname):
     for child in children:
         if is_finished(child.path) == 2:  # skip unfinished directories
             continue
-        output[child.path] = parse_results(child.path)
+        output[child] = parse_results(child.path).mean()
 
     return output
 

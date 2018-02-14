@@ -28,62 +28,56 @@ def pressure(d):
 
 @pytest.mark.usefixtures('newdir')
 class TestSplit(object):
-    FILES = ['file1.txt', 'file2.txt', 'simulation.input']
-
     @pytest.mark.parametrize('ntasks', [1, 2, 3, 4, 5])
-    def test_split_dirs(self, ntasks):
-        hrsp.split('mysim', '1234567', ntasks=ntasks)
+    def test_split_ntasks(self, ntasks):
+        # check varying ntasks
+        hrsp.split(src='mysim', temperatures=[100.0],
+                   pressures=[1234.0], ncycles=10000,
+                   ntasks=ntasks)
 
         # check that required directories were made
         for i in range(ntasks):
-            assert os.path.exists('mysim_1234567_part{}'.format(i + 1))
-        assert not os.path.exists('mysim_1234567_part{}'.format(i + 2))
+            assert os.path.exists(
+                os.path.join('mysim', 'T100.0_P1234.0_part{}'.format(i + 1)))
+        assert not os.path.exists(
+            os.path.join('mysim', 'T100.0_P1234.0_part{}'.format(i + 2)))
 
     def test_split_files(self):
-        hrsp.split('mysim', '1234567', ntasks=2)
-
         # check that each directory made had all the required files
+        hrsp.split(src='mysim', temperatures=[100.0],
+                   pressures=[1234.0], ncycles=10000,
+                   ntasks=2)
 
-        for d in ('mysim_1234567_part1', 'mysim_1234567_part2'):
-            for fn in self.FILES:
+        root = os.path.join('mysim', 'T100.0_P1234.0_part{}')
+
+        for d in (root.format(1), root.format(2)):
+            for fn in ['file1.txt', 'file2.txt', 'simulation.input']:
                 assert os.path.exists(os.path.join(d, fn))
-
-    @pytest.mark.parametrize('ntasks,ncycles,expected', [
-        (2, None, 500001),  # divide 1M cycles by ntasks (+1)
-        (3, None, 333334),
-        (4, None, 250001),
-        (2, 10000, 10000),  # override division thingy
-        (4, 25000, 25000),
-    ])
-    def test_check_runlength(self, ntasks, ncycles, expected):
-        hrsp.split('mysim', '1234567', ntasks=ntasks, ncycles=ncycles)
-
-        assert len(glob.glob('mysim_1234567_part*')) == ntasks
-        for d in glob.glob('mysim_1234567_part*'):
-            assert runlength(d) == expected
 
     def test_eq_length(self):
         # hack the equilibration length to be 100
-        with open('mysim/simulation.input', 'r') as inf, open('new', 'w') as new:
-            for line in inf:
-                if line.startswith('NumberOfInit'):
-                    line = 'NumberOfInitializationCycles  100\n'
-                new.write(line)
-        shutil.move('new', 'mysim/simulation.input')
+        with open('mysim/template/simulation.input', 'r') as inf:
+            with open('new', 'w') as new:
+                for line in inf:
+                    if line.startswith('NumberOfInit'):
+                        line = 'NumberOfInitializationCycles  100\n'
+                    new.write(line)
+        shutil.move('new', 'mysim/template/simulation.input')
 
-        hrsp.split('mysim', '1234567', ntasks=2, ncycles=100)
+        hrsp.split(src='mysim', temperatures=[100.0],
+                   pressures=[1234.0], ncycles=10000,
+                   ntasks=2)
 
-        for d in glob.glob('mysim_1234567_part*'):
+        for d in glob.glob('mysim_T100.0_P1234.0_part*'):
             assert eq_length(d) == 0
 
-    @pytest.mark.parametrize('ntasks', [1, 2])
     @pytest.mark.parametrize('p', [[5, 10, 20], [5.5, 10, 20]])
-    def test_pressures(self, ntasks, p):
-        hrsp.split('mysim', '1234567', ntasks=ntasks, pressures=p)
+    def test_pressures(self, p):
+        hrsp.split('mysim', temperatures=[100.0], pressures=p,
+                   ntasks=1, ncycles=1000)
 
-        assert len(glob.glob('mysim_1234567_P*_part*')) == ntasks * len(p)
-        assert os.path.exists('mysim_1234567_P10_part1')
+        assert len(glob.glob('mysim/T100.0_P*_part1')) == len(p)
 
         # check runlengths
         # check pressures
-        assert pressure('mysim_1234567_P10_part1') == 10.0
+        assert pressure('mysim/T100.0_P10_part1') == 10.0

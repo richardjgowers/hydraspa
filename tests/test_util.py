@@ -1,3 +1,4 @@
+import os
 import pytest
 
 import hydraspa
@@ -21,3 +22,27 @@ def test_conv_to_number(val, conv, expected):
 def test_conv_fail():
     with pytest.raises(ValueError):
         hydraspa.util.conv_to_number('5.4q', float)
+
+
+@pytest.fixture()
+def discover(tmpdir):
+    tmpdir.mkdir('mysim')
+    tmpdir.mkdir('mysim', 'template')
+
+    for T in [100.0, 200.0]:
+        for P in [10.0, 20.0]:
+            tmpdir.mkdir('mysim', 'T{}_P{}_part1'.format(T, P))
+
+    with tmpdir.as_cwd():
+        yield 'mysim'
+
+
+def test_discover(discover):
+    results = hydraspa.util.discover('mysim')
+
+    assert len(results) == 4
+
+    assert results[0].path == 'mysim/T100.0_P10.0_part1'
+    assert results[0].temperature == 100.0
+    assert results[0].pressure == 10.0
+    assert results[0].partnumber == 1

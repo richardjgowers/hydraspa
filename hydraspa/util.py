@@ -13,7 +13,7 @@ STATUSES = {
     2: 'NOT STARTED',
 }
 
-Result = namedtuple('Result', ['path', 'root', 'fingerprint', 'pressure', 'partnumber'])
+Result = namedtuple('Result', ['path', 'temperature', 'pressure', 'partnumber'])
 
 def is_finished(dirname):
     """Check if raspa simulation in *dirname* finished"""
@@ -65,17 +65,25 @@ def conv_to_number(val, conv):
 def discover(root):
     """Find all children of *root*
 
+    Parameters
+    ----------
+    root : str
+      path to directory to search
+
     Returns
     -------
-    List of namedtuple of (path, root, fingerprint, pressure, partnumber)
+    Sorted list of namedtuple of (path, temperature, pressure, partnumber)
     """
-    # root, 7digit fingerprint, maybe a pressure, part number
-    pat = '(\w+?)_(\w{7})(?:_P(.+?))?_part(\d+)'
-    all_results = (re.match(pat, val) for val in os.listdir('.')
-                   if os.path.isdir(val))
-    results = [Result(*((m.string,) + m.groups()))
-               for m in all_results if (not m is None and m.groups()[0] == root)]
-    # Sort results by pressure, then within each pressure the partnumber
-    results = sorted(results, key=lambda x: (x.pressure, x.partnumber))
+    pat = r'T(\d+\.\d+)_P(\d+\.\d+)_part(\d+)'
 
-    return results
+    children = []
+    for dirname in os.listdir(root):
+        mat = re.match(pat, dirname)
+
+        if mat is not None:
+            T, P, part = mat.groups()
+            T, P, part = float(T), float(P), int(part)
+            children.append(Result(os.path.join(root, dirname), T, P, part))
+
+    return sorted(children,
+                  key=lambda x: (x.temperature, x.pressure, x.partnumber))

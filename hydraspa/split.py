@@ -26,15 +26,13 @@ def zero_init(line):
     return 'NumberOfInitializationCycles 0\n'
 
 
-def split(src, fingerprint, temperatures, pressures, ntasks, ncycles):
+def split(src, temperatures, pressures, ntasks, ncycles):
     """Split simulation in src into various conditions
 
     Parameters
     ----------
     src : string
       Name of the directory we wish to copy
-    fingerprint : string
-      Unique identifier for this setup
     temperatures : list
       List of temperatures (in K) to create
     pressures : list
@@ -52,7 +50,7 @@ def split(src, fingerprint, temperatures, pressures, ntasks, ncycles):
     newdirs = []
 
     for T, P, i in itertools.product(temperatures, pressures, range(ntasks)):
-        newname = '{}_T{}_P{}_part{}'.format(fingerprint, T, P, i+1)
+        newname = 'T{}_P{}_part{}'.format(T, P, i+1)
         newdirs.append(newname)
         # Copy over everything
         shutil.copytree(src, newname)

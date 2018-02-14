@@ -46,8 +46,6 @@ class TestCLI(object):
         assert len(glob.glob('mysim*part*')) == int(ntasks)
         # check the qsubber script was made
         assert os.path.exists('qsub_mysim.sh')
-        # check the passport was made
-        assert len(glob.glob('mysim*.tar.gz')) == 1
 
     @pytest.mark.parametrize('path', ['mysim', 'mysim/'])
     @pytest.mark.parametrize('pstyle', ['-P', '--pressures'])

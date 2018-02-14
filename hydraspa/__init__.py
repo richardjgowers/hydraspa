@@ -4,7 +4,6 @@ from . import util
 
 from . import files
 from . import cli
-from . import passport
 from .split import split
 from . import gather
 from .check import check

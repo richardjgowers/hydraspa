@@ -52,10 +52,8 @@ if __name__ == '__main__':
 
         ncycles = conv_to_number(args['-c'], int)
 
-        fingerprint = hrsp.passport.create_passport(args['<dirname>'])
         hrsp.split(
             src=args['<dirname>'],
-            fingerprint=fingerprint,
             ntasks=int(args['-n']),
             ncycles=ncycles,
             pressures=pressures,

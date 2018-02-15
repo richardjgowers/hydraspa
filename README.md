@@ -1,5 +1,8 @@
 # Hydraspa
 
+[![Build Status](https://travis-ci.org/richardjgowers/hydraspa.svg?branch=master)](https://travis-ci.org/richardjgowers/hydraspa)
+[![codecov](https://codecov.io/gh/richardjgowers/hydraspa/branch/master/graph/badge.svg)](https://codecov.io/gh/richardjgowers/hydraspa)
+
 Hydraspa (hydra + Raspa) is a Python package for preparing GCMC gas adsorption simulation inputs for the [Raspa](https://github.com/numat/RASPA2) simulation package.
 
 
@@ -23,14 +26,15 @@ pip install -r requirements.txt .
 hydraspa is designed to be used via the command line to prepare and analyse simulation inputs:
 
 
-
 ```bash
+# Create a simulation template of CO2 in IRMOF-1
 hydraspa create -s IRMOF-1 -g CO2 -f UFF -o myCO2sim
 
-cd myCO2sim
+# Split the template into many temperatures and pressures
+hydraspa split myCO2sim/ -p 10k,20k,30k -T  278.0,298.0 -c 20k
 
-hydraspa split template/ -p 10k,20k,30k -T  298.0 -c 20k
-
+# Gather the results once the simulation has been done
+hydraspa gather myCO2sim/
 
 ```
 

@@ -1,10 +1,15 @@
+import os
 import pytest
 
 import hydraspa as hrsp
 
 
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+
 def test_parser_1():
-    res = hrsp.gather.parse_results('gth/T100.0_P400.0_part1')
+    res = hrsp.gather.parse_results(
+        os.path.join(HERE, 'gth', 'T100.0_P400.0_part1'))
 
     assert res.values[0] == 1.5
     assert res.values[1] == 3.0
@@ -18,7 +23,8 @@ def test_parser_1():
 
 
 def test_parser_2():
-    res = hrsp.gather.parse_results('gth/T100.0_P800.0_part1')
+    res = hrsp.gather.parse_results(
+        os.path.join(HERE, 'gth', 'T100.0_P800.0_part1'))
 
     assert res.values[0] == 6.0
     assert res.values[1] == 7.0
@@ -32,7 +38,7 @@ def test_parser_2():
 
 
 def test_gather():
-    gth = hrsp.gather.gather('gth')
+    gth = hrsp.gather.gather(os.path.join(HERE, 'gth'))
 
     assert len(gth) == 2
     # P=400.0 == 3.75 avg

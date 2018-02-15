@@ -39,75 +39,63 @@ class TestCLI(object):
     @pytest.mark.parametrize('path', ['mysim', 'mysim/'])
     @pytest.mark.parametrize('ntasks', ['2', '3', '4'])
     def test_cli(self, path, ntasks):
-        cmd = 'hydraspa split {path} -n {n}'.format(path=path, n=ntasks)
+        cmd = 'hydraspa split {path} -n {n} -P 10 -T 208.0 -c 20k'.format(
+            path=path, n=ntasks)
         call(cmd)
 
         # check we made enough sub folders
-        assert len(glob.glob('mysim*part*')) == int(ntasks)
-        # check the qsubber script was made
-        assert os.path.exists('qsub_mysim.sh')
+        assert len(glob.glob('mysim/*part*')) == int(ntasks)
 
-    @pytest.mark.parametrize('path', ['mysim', 'mysim/'])
-    @pytest.mark.parametrize('pstyle', ['-P', '--pressures'])
+    @pytest.mark.parametrize('pstyle', ['-P'])
     @pytest.mark.parametrize('pressures',
-        ['11.1 10000 30000', '11.1 10k 0.03M', '0.0111k 10000 30k']
+        ['11.1,10000,30000', '11.1,10k,0.03M', '0.0111k,10000,30k']
     )
-    def test_pressure_cli(self, path, pstyle, pressures):
-        cmd = 'hydraspa split {path} -n 2 {psty} {pressures}'.format(
-            path=path, psty=pstyle, pressures=pressures)
+    def test_pressure_cli(self, pstyle, pressures):
+        cmd = 'hydraspa split mysim {psty} {pressures} -T 208.0 -c 20k -n 2'.format(
+            psty=pstyle, pressures=pressures)
         call(cmd)
 
-        assert len(glob.glob('mysim_4033d12_P*_part*')) == 6
-        assert pressure('mysim_4033d12_P11.1_part1') == 11.1
-        assert pressure('mysim_4033d12_P10000.0_part1') == 10000.
-        assert pressure('mysim_4033d12_P30000.0_part1') == 30000.
+        assert len(glob.glob('mysim/T*_P*_part*')) == 6
+        assert pressure('mysim/T208.0_P11.1_part1') == 11.1
+        assert pressure('mysim/T208.0_P10000.0_part1') == 10000.
+        assert pressure('mysim/T208.0_P30000.0_part1') == 30000.
 
     @pytest.mark.parametrize('path', ['mysim', 'mysim/'])
-    @pytest.mark.parametrize('cycles', ['-c', '--ncycles'])
+    @pytest.mark.parametrize('cycles', ['-c'])
     @pytest.mark.parametrize('ncycles', ['900000', '900k', '0.9M'])
     def test_cycles_cli(self, path, cycles, ncycles):
-        cmd = 'hydraspa split {path} -n 2 {cyc} {ncyc}'.format(
+        cmd = 'hydraspa split {path} -P 10.0 -T 208.0 {cyc} {ncyc} -n 2'.format(
             path=path, cyc=cycles, ncyc=ncycles)
         call(cmd)
 
-        for d in ['mysim_4033d12_part1', 'mysim_4033d12_part2']:
+        for d in ['mysim/T208.0_P10.0_part1', 'mysim/T208.0_P10.0_part2']:
             assert runlength(d) == 900000
 
 
 class TestDocopt(object):
     def test_default_ntasks(self):
-        args = docopt(doc, 'split this'.split())
+        args = docopt(doc, 'split this -P 10 -T 208 -c 40'.split())
 
-        assert args['--ntasks'] == '1'
+        assert args['-n'] == '1'
 
-    @pytest.mark.parametrize('taskstyle', ['-n', '--ntasks'])
     @pytest.mark.parametrize('ntasks', ['2', '3', '4'])
-    def test_ntasks(self, taskstyle, ntasks):
-        cmdstr = 'split this {} {}'.format(taskstyle, ntasks)
+    def test_ntasks(self, ntasks):
+        cmdstr = 'split this -P 10 -T 200 -c 40 -n {}'.format(ntasks)
 
         args = docopt(doc, cmdstr.split())
 
-        assert args['--ntasks'] == ntasks
-        assert not args['--pressures']
+        assert args['-n'] == ntasks
 
-    @pytest.mark.parametrize('taskstyle', ['-n', '--ntasks'])
-    @pytest.mark.parametrize('ntasks', ['2', '3'])
-    @pytest.mark.parametrize('pressurestyle', ['-P', '--pressures'])
-    @pytest.mark.parametrize('pressures', ['10 20 30', '5 10 20'])
-    def test_pressures(self, taskstyle, ntasks, pressurestyle, pressures):
-        cmdstr = 'split this {} {} {} {}'.format(taskstyle, ntasks,
-                                                 pressurestyle, pressures)
+    @pytest.mark.parametrize('pressures', ['10,20,30', '5,10,20'])
+    def test_pressures(self, pressures):
+        cmdstr = 'split this -P {} -T 208.0 -c 20k'.format(pressures)
         args = docopt(doc, cmdstr.split())
 
-        assert args['--ntasks'] == ntasks
-        assert args['--pressures']
-        assert args['<P>'] == pressures.split()
+        assert args['-P'] == pressures
 
-    @pytest.mark.parametrize('cyclestyle', ['-c'])
     @pytest.mark.parametrize('ncycles', ['100', '250'])
-    def test_ncycles(self, cyclestyle, ncycles):
-        cmdstr = 'split this -n 2 {} {} -P 10,20 -T 200,300'.format(
-            cyclestyle, ncycles)
+    def test_ncycles(self, ncycles):
+        cmdstr = 'split this -c {} -P 10,20 -T 200,300'.format(ncycles)
 
         args = docopt(doc, cmdstr.split())
 

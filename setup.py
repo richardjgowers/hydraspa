@@ -13,6 +13,7 @@ setup(
     name='hydraspa',
     version=version,
     long_description=long_description,
+    long_description_content_type='text/markdown',
     url='https://github.com/richardjgowers/hydraspa',
     author='Richard J Gowers',
     license='GPL v3',

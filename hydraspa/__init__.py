@@ -8,4 +8,4 @@ from .split import split
 from . import gather
 from .check import check
 from . import poreblazer
-from .create import create, cli_create
+from .create import create, cli_create, grab_structure

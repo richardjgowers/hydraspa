@@ -7,6 +7,8 @@ from . import poreblazer
 
 
 def _filename(fn):
+    # grab the last part of a filename
+    # this/place/file.txt -> file.txt
     return os.path.split(fn)[-1]
 
 
@@ -124,3 +126,16 @@ def cli_create(structure, gas, forcefield, outdir):
     for k, v in outfiles.items():
          with open(os.path.join(template_dir, k), 'w') as out:
              out.write(v)
+
+def grab_structure(structure, outdir=None):
+    """Grab a single structure file"""
+    struc_file = files.structures[structure.upper()]
+
+    if outdir:
+        os.makedirs(outdir)
+        outfile = os.path.join(outdir, _filename(struc_file))
+    else:
+        outfile = _filename(struc_file)
+                
+    with open(outfile, 'w') as out, open(struc_file, 'r') as inf:
+        out.write(inf.read())

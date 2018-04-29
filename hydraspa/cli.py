@@ -4,8 +4,11 @@ Quantities such as cycles and pressures can be defined using 'k' and
 'M' suffixes, for example '4.2k' will be interpreted as '4200', and
 '1M' as 1000000.
 
- - "create" makes a GCMC input
+ - "create" makes a Raspa GCMC input
+ - "split" makes many Raspa inputs from a single template
  - "poreblazer" makes a poreblazer input
+ - "grab" fetch a single structure from database
+
 
 Usage:
   hydraspa list (structures | gases | forcefields)
@@ -14,6 +17,7 @@ Usage:
   hydraspa split <dirname> -P <P> -T <T> -c <C> [-n <N>]
   hydraspa check <dirname>
   hydraspa gather <dirname>
+  hydraspa grab <struc> [-o <outdir>]
   hydraspa --version
 
 Options:

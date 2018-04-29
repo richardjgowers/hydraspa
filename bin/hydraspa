@@ -60,3 +60,5 @@ if __name__ == '__main__':
 
         for res, value in sorted(results.items()):
             print("{r.temperature} {r.pressure}: {v}".format(r=res, v=value))
+    elif args['grab']:
+        hrsp.grab_structure(args['<struc>'], args['-o'])

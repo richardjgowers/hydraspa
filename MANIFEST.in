@@ -1,3 +1,4 @@
+include README.md
 include hydraspa/structures/*.cif
 include hydraspa/forcefields/*.def
 include hydraspa/gases/*.def

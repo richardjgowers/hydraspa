@@ -119,7 +119,8 @@ def cli_create(structure, gas, forcefield, outdir):
       path to create the template
     """
     outfiles = create(structure, gas, forcefield)
-
+    if os.path.exists(outdir):
+        shutil.rmtree(outdir)
     os.makedirs(outdir)
     template_dir = os.path.join(outdir, 'template')
     os.makedirs(template_dir)
